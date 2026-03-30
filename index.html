@@ -3,61 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Promotie & Publiciteit Monitor</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style>
-:root{--eu-blue:#003399;--eu-yellow:#FFCC00;--light-blue:#e8eef8;--green:#28a745;--red:#dc3545;--border:#d0d9f0;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#fff;color:#222;}
-#login-screen{position:fixed;inset:0;background:var(--eu-blue);display:flex;align-items:center;justify-content:center;z-index:9999;}
-.login-box{background:white;padding:48px 40px;border-radius:14px;text-align:center;width:380px;box-shadow:0 12px 48px rgba(0,0,0,0.4);}
-.eu-stars{color:var(--eu-yellow);font-size:24px;letter-spacing:4px;margin-bottom:16px;}
-.login-box h2{color:var(--eu-blue);font-size:22px;margin-bottom:6px;}
-.login-box p{color:#666;font-size:14px;margin-bottom:28px;}
-.login-box input{width:100%;padding:12px 14px;border:2px solid #ddd;border-radius:8px;font-size:16px;margin-bottom:14px;}
-.login-box button{width:100%;padding:13px;background:var(--eu-blue);color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;}
-.login-error{color:#dc3545;font-size:13px;margin-top:10px;display:none;}
-header{background:var(--eu-blue);color:white;padding:16px 28px;display:flex;align-items:center;gap:16px;border-bottom:4px solid var(--eu-yellow);}
-.header-text h1{font-size:20px;}.header-text p{font-size:13px;opacity:.75;}
-.header-status{margin-left:auto;background:rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;font-size:12px;}
-.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
-.status-dot.green{background:#4caf50;}.status-dot.orange{background:var(--eu-yellow);}
-.tabs{background:var(--eu-blue);display:flex;padding:0 28px;border-bottom:1px solid rgba(255,255,255,.15);}
-.tab{color:rgba(255,255,255,.65);padding:13px 20px;cursor:pointer;font-size:14px;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
-.tab:hover{color:white;}.tab.active{color:var(--eu-yellow);border-bottom-color:var(--eu-yellow);font-weight:bold;}
-.content{padding:28px;max-width:1500px;margin:0 auto;}
-.tab-content{display:none;}.tab-content.active{display:block;}
-.dashboard-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px;}
-.card{background:var(--light-blue);border-radius:10px;padding:22px 18px;text-align:center;border-left:4px solid var(--eu-blue);}
-.card .number{font-size:38px;font-weight:bold;color:var(--eu-blue);}.card .label{font-size:12px;color:#555;margin-top:4px;}
-.program-row{background:var(--light-blue);border-radius:10px;padding:18px 22px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;border-left:4px solid var(--eu-blue);}
-.program-row h3{color:var(--eu-blue);font-size:15px;}.program-row .sub{font-size:12px;color:#666;margin-top:3px;}
-.program-stats{display:flex;gap:28px;}.program-stat{text-align:center;}
-.program-stat .n{font-size:26px;font-weight:bold;color:var(--eu-blue);}.program-stat .l{font-size:11px;color:#777;}
-.section-title{font-size:17px;font-weight:bold;color:var(--eu-blue);margin:24px 0 14px;border-bottom:2px solid var(--eu-blue);padding-bottom:8px;}
-.note{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:12px 16px;font-size:13px;color:#5d4037;margin-bottom:20px;}
-.dropdown-wrap{margin-bottom:20px;}
-.dropdown-wrap label{display:block;font-weight:bold;color:var(--eu-blue);margin-bottom:6px;font-size:14px;}
-.dropdown-wrap select{width:100%;max-width:600px;padding:11px 14px;border:2px solid var(--eu-blue);border-radius:8px;font-size:14px;background:white;cursor:pointer;}
-.agent-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
-.agent-btn{padding:9px 16px;border:none;border-radius:8px;font-size:13px;font-weight:bold;cursor:pointer;transition:all .2s;}
-.agent-btn.blue{background:var(--eu-blue);color:white;}.agent-btn.blue:hover{background:#002270;}
-.agent-btn.green{background:var(--green);color:white;}.agent-btn.green:hover{background:#1e7e34;}
-.agent-progress{font-size:12px;color:#555;background:var(--light-blue);border-radius:6px;padding:6px 12px;}
-.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border);}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:1000px;}
-thead tr{background:var(--eu-blue);}
-th{color:white;padding:11px 12px;text-align:left;font-size:12px;font-weight:bold;white-space:nowrap;}
-td{padding:10px 12px;border-bottom:1px solid #e8eef8;vertical-align:middle;}
-tr:hover td{background:#f0f4ff;}
-.dot{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:middle;}
-.dot.green{background:var(--green);}.dot.red{background:var(--red);}.dot.gray{background:#ccc;}
-a.url-link{color:var(--eu-blue);font-size:12px;word-break:break-all;text-decoration:none;}
-a.url-link:hover{text-decoration:underline;}
-.spinner{display:inline-block;width:14px;height:14px;border:2px solid #ccc;border-top-color:var(--eu-blue);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.loading-bar{background:var(--light-blue);border-radius:8px;padding:20px;text-align:center;color:var(--eu-blue);font-weight:bold;margin-bottom:16px;}
-</style>
+<title>Promotie &amp; Publiciteit Monitor</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="login-screen">
@@ -65,8 +12,8 @@ a.url-link:hover{text-decoration:underline;}
     <div class="eu-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
     <h2>Promotie &amp; Publiciteit</h2>
     <p>Europese Fondsen West-Nederland<br>Voer het wachtwoord in om toegang te krijgen</p>
-    <input type="password" id="pwd-input" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')checkPwd()">
-    <button onclick="checkPwd()">Inloggen</button>
+    <input type="password" id="pwd-input" placeholder="Wachtwoord">
+    <button id="login-btn">Inloggen</button>
     <div class="login-error" id="login-error">Onjuist wachtwoord. Probeer opnieuw.</div>
   </div>
 </div>
@@ -80,10 +27,10 @@ a.url-link:hover{text-decoration:underline;}
     <div class="header-status" id="header-status"><span class="status-dot orange"></span>Data laden...</div>
   </header>
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('dashboard',this)">Dashboard</div>
-    <div class="tab" onclick="switchTab('kvw3',this)">Kansen voor West III</div>
-    <div class="tab" onclick="switchTab('ijmond',this)">JTF IJmond</div>
-    <div class="tab" onclick="switchTab('rijnmond',this)">JTF Rijnmond</div>
+    <div class="tab active" id="tab-btn-dashboard">Dashboard</div>
+    <div class="tab" id="tab-btn-kvw3">Kansen voor West III</div>
+    <div class="tab" id="tab-btn-ijmond">JTF IJmond</div>
+    <div class="tab" id="tab-btn-rijnmond">JTF Rijnmond</div>
   </div>
   <div class="content">
     <div id="tab-dashboard" class="tab-content active">
@@ -101,37 +48,12 @@ a.url-link:hover{text-decoration:underline;}
       <div class="program-row"><div><h3>JTF Rijnmond</h3><div class="sub">Just Transition Fund | Zuid-Holland</div></div><div class="program-stats"><div class="program-stat"><div class="n" id="ds-rijnmond-total">&mdash;</div><div class="l">Projecten</div></div><div class="program-stat"><div class="n" id="ds-rijnmond-partners">&mdash;</div><div class="l">Partners</div></div><div class="program-stat"><div class="n" id="ds-rijnmond-compliant">&mdash;</div><div class="l">Compliant</div></div></div></div>
       <div class="note">Data wordt live opgehaald van kansenvoorwest.nl. Gebruik de agents per tabblad om websites op te zoeken en compliance te controleren conform VO.2021/1060.</div>
     </div>
-    <div id="tab-kvw3" class="tab-content"><div id="kvw3-loading" class="loading-bar"><span class="spinner"></span> Data laden van kvw3.kansenvoorwest.nl...</div><div id="kvw3-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="kvw3-select" onchange="showProjectTable('kvw3')"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="kvw3-project-area"></div></div></div>
-    <div id="tab-ijmond" class="tab-content"><div id="ijmond-loading" class="loading-bar"><span class="spinner"></span> Data laden van jtf-ijmond.kansenvoorwest.nl...</div><div id="ijmond-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="ijmond-select" onchange="showProjectTable('ijmond')"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="ijmond-project-area"></div></div></div>
-    <div id="tab-rijnmond" class="tab-content"><div id="rijnmond-loading" class="loading-bar"><span class="spinner"></span> Data laden van jtf-rijnmond.kansenvoorwest.nl...</div><div id="rijnmond-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="rijnmond-select" onchange="showProjectTable('rijnmond')"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="rijnmond-project-area"></div></div></div>
+    <div id="tab-kvw3" class="tab-content"><div id="kvw3-loading" class="loading-bar"><span class="spinner"></span> Data laden...</div><div id="kvw3-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="kvw3-select"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="kvw3-project-area"></div></div></div>
+    <div id="tab-ijmond" class="tab-content"><div id="ijmond-loading" class="loading-bar"><span class="spinner"></span> Data laden...</div><div id="ijmond-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="ijmond-select"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="ijmond-project-area"></div></div></div>
+    <div id="tab-rijnmond" class="tab-content"><div id="rijnmond-loading" class="loading-bar"><span class="spinner"></span> Data laden...</div><div id="rijnmond-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="rijnmond-select"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="rijnmond-project-area"></div></div></div>
   </div>
 </div>
-<script>
-function checkPwd(){if(document.getElementById('pwd-input').value==='PromotieENPubliciteit'){document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';initApp();}else{document.getElementById('login-error').style.display='block';}}
-function switchTab(n,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('tab-'+n).classList.add('active');}
-const EXCEL_URLS={kvw3:'https://kvw3.kansenvoorwest.nl/files/kvw3-2021-2027-01-12-25.xlsx',ijmond:'https://jtf-ijmond.kansenvoorwest.nl/files/jtf-ijmond-02-06-25.xlsx',rijnmond:'https://jtf-rijnmond.kansenvoorwest.nl/files/jtf-rijnmond-02-06-25.xlsx'};
-const projectData={kvw3:[],ijmond:[],rijnmond:[]};const ppCache={};
-async function loadExcel(key){try{const r=await fetch(EXCEL_URLS[key]);const b=await r.blob();const b64=await new Promise(res=>{const rd=new FileReader();rd.onloadend=()=>res(rd.result.split(',')[1]);rd.readAsDataURL(b);});const wb=XLSX.read(b64,{type:'base64'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1});const h=rows[0];return rows.slice(1).filter(r=>r&&r.length>1).map(row=>{const o={};h.forEach((hh,i)=>{o[hh]=row[i]!==undefined?row[i]:'';});return o;});}catch(e){console.error(e);return[];}}
-function getPart(p){return(p['Begunstigden']||'').split('|').map(s=>s.trim()).filter(Boolean);}
-async function initApp(){const[kv,ij,ri]=await Promise.all([loadExcel('kvw3'),loadExcel('ijmond'),loadExcel('rijnmond')]);projectData.kvw3=kv;projectData.ijmond=ij;projectData.rijnmond=ri;
-const tot=kv.length+ij.length+ri.length;document.getElementById('d-total').textContent=tot;document.getElementById('d-kvw3-n').textContent=kv.length;document.getElementById('d-ijmond-n').textContent=ij.length;document.getElementById('d-rijnmond-n').textContent=ri.length;
-document.getElementById('ds-kvw3-total').textContent=kv.length;document.getElementById('ds-ijmond-total').textContent=ij.length;document.getElementById('ds-rijnmond-total').textContent=ri.length;
-document.getElementById('ds-kvw3-partners').textContent=kv.reduce((s,p)=>s+getPart(p).length,0);document.getElementById('ds-ijmond-partners').textContent=ij.reduce((s,p)=>s+getPart(p).length,0);document.getElementById('ds-rijnmond-partners').textContent=ri.reduce((s,p)=>s+getPart(p).length,0);
-document.getElementById('header-status').innerHTML='<span class="status-dot green"></span>'+tot+' projecten geladen';
-['kvw3','ijmond','rijnmond'].forEach(key=>{const sel=document.getElementById(key+'-select');projectData[key].forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(p['Projectnummer']||'')+' — '+(p['Projectnaam']||'');sel.appendChild(o);});document.getElementById(key+'-loading').style.display='none';document.getElementById(key+'-main').style.display='block';});}
-function ck(k,pi,bi){return k+'_'+pi+'_'+bi;}
-function dot(v){if(v===true)return '<span class="dot green"></span>';if(v===false)return '<span class="dot red"></span>';return '<span class="dot gray"></span>';}
-function showProjectTable(key){const idx=document.getElementById(key+'-select').value;const area=document.getElementById(key+'-project-area');if(idx===''){area.innerHTML='';return;}
-const p=projectData[key][parseInt(idx)];const parts=getPart(p);const adrs=(p['Adresgegevens begunstigden']||'').split('|').map(s=>s.trim());
-const rows=parts.map((pt,bi)=>{const c=ppCache[ck(key,idx,bi)]||{};const ws=c.website||'';const wsd=ws?'<a href="'+ws+'" target="_blank" class="url-link">'+ws+'</a>':'<em style="color:#aaa;font-size:11px">Niet gevonden</em>';const ad=c.artikel_url?'<br><a href="'+c.artikel_url+'" target="_blank" class="url-link" style="font-size:11px">Artikel</a>':'';const ld=c.linkedin?'<a href="'+c.linkedin+'" target="_blank" class="url-link">LinkedIn</a>':'<em style="color:#aaa;font-size:11px">&mdash;</em>';const td=c.twitter?'<a href="'+c.twitter+'" target="_blank" class="url-link">Twitter/X</a>':'<em style="color:#aaa;font-size:11px">&mdash;</em>';const od=c.overig?'<span style="font-size:11px">'+c.overig+'</span>':'<em style="color:#aaa;font-size:11px">&mdash;</em>';const chk=ws?'<button class="agent-btn green" style="padding:5px 10px;font-size:11px" onclick="runCheck(''+key+'','+idx+','+bi+')">&#10003; Check</button>':'<em style="color:#aaa;font-size:11px">Eerst website</em>';const fnd=!ws?'<button class="agent-btn blue" style="padding:5px 10px;font-size:11px;margin-top:4px" onclick="runFind(''+key+'','+idx+','+bi+')">Zoek</button>':'';
-return '<tr><td><strong>'+pt+'</strong><br><span style="font-size:11px;color:#888">'+(adrs[bi]||'')+'</span></td><td>'+wsd+fnd+'</td><td style="text-align:center">'+dot(c.verwijzing)+'</td><td style="text-align:center">'+dot(c.eu_vlag)+'</td><td style="text-align:center">'+dot(c.efro)+ad+'</td><td>'+ld+'</td><td>'+td+'</td><td>'+od+'</td><td>'+chk+'</td></tr>';}).join('');
-area.innerHTML='<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:6px">'+(p['Projectnaam']||'')+'</h3><p style="font-size:13px;color:#666;margin-bottom:16px">Nr: '+(p['Projectnummer']||'')+' | Penvoerder: '+(p['Penvoerder naam']||'')+' | '+(p['Penvoerder stad']||'')+'</p><div class="agent-bar"><button class="agent-btn blue" onclick="runFindAll(''+key+'','+idx+')">&#128269; Zoek alle websites (Agent 2)</button><button class="agent-btn green" onclick="runCheckAll(''+key+'','+idx+')">&#10003; Check alle compliance (Agent 3)</button><span class="agent-progress" id="ap-'+key+'-'+idx+'"></span></div><div class="table-wrap"><table><thead><tr><th>Projectpartner</th><th>Website</th><th>Verwijzing project</th><th>EU-vlag + vermelding</th><th>EFRO/KvW/Europa artikel</th><th>LinkedIn</th><th>Twitter/X</th><th>Overige media</th><th>Actie</th></tr></thead><tbody>'+rows+'</tbody></table></div><p style="font-size:11px;color:#888;margin-top:10px">VO.2021/1060 Art.47-50: Begunstigden tonen EU-vlag met Medegefinancierd door de Europese Unie en verwijzen naar het project.</p>';}
-async function callAgent(prompt){const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});const d=await r.json();const txt=(d.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');const m=txt.match(/{[sS]*?}/);return m?JSON.parse(m[0]):null;}
-async function runFind(key,pi,bi){const ckey=ck(key,pi,bi);if(!ppCache[ckey])ppCache[ckey]={};const pt=getPart(projectData[key][pi])[bi];const pg=document.getElementById('ap-'+key+'-'+pi);if(pg)pg.textContent='Zoeken: '+pt+'...';try{const res=await callAgent('Zoek de officiele website van de Nederlandse organisatie "'+pt+'" betrokken bij EFRO/JTF subsidie. Geef ALLEEN JSON: {"website":"https://...","linkedin":"URL of null","twitter":"URL of null","overig":"tekst of null"}. Geen andere tekst.');if(res){if(res.website)ppCache[ckey].website=res.website;if(res.linkedin&&res.linkedin!=='null')ppCache[ckey].linkedin=res.linkedin;if(res.twitter&&res.twitter!=='null')ppCache[ckey].twitter=res.twitter;if(res.overig&&res.overig!=='null')ppCache[ckey].overig=res.overig;}if(pg)pg.textContent='Gevonden: '+pt;showProjectTable(key);}catch(e){if(pg)pg.textContent='Fout: '+pt;}}
-async function runFindAll(key,pi){const pts=getPart(projectData[key][pi]);const pg=document.getElementById('ap-'+key+'-'+pi);for(let bi=0;bi<pts.length;bi++){if(ppCache[ck(key,pi,bi)]&&ppCache[ck(key,pi,bi)].website)continue;if(pg)pg.textContent=(bi+1)+'/'+pts.length+': '+pts[bi];await runFind(key,pi,bi);await new Promise(r=>setTimeout(r,600));}if(pg)pg.textContent='Klaar: '+pts.length+' partners doorzocht';showProjectTable(key);}
-async function runCheck(key,pi,bi){const ckey=ck(key,pi,bi);if(!ppCache[ckey]||!ppCache[ckey].website)return;const pt=getPart(projectData[key][pi])[bi];const ws=ppCache[ckey].website;const pg=document.getElementById('ap-'+key+'-'+pi);if(pg)pg.textContent='Compliance check: '+pt+'...';try{const res=await callAgent('Controleer website "'+ws+'" van "'+pt+'" op VO.2021/1060 art.47-50: 1)Verwijzing naar EFRO/JTF project. 2)EU-vlag + Medegefinancierd door de Europese Unie. 3)Woorden EFRO/Kansen voor West/Europa/JTF op site. Geef ALLEEN JSON: {"verwijzing":true/false,"eu_vlag":true/false,"efro":true/false,"artikel_url":"URL of null","linkedin":"URL of null","twitter":"URL of null","overig":"tekst of null"}. Geen andere tekst.');if(res){ppCache[ckey].verwijzing=res.verwijzing===true;ppCache[ckey].eu_vlag=res.eu_vlag===true;ppCache[ckey].efro=res.efro===true;ppCache[ckey].artikel_url=res.artikel_url&&res.artikel_url!=='null'?res.artikel_url:null;if(res.linkedin&&res.linkedin!=='null')ppCache[ckey].linkedin=res.linkedin;if(res.twitter&&res.twitter!=='null')ppCache[ckey].twitter=res.twitter;if(res.overig&&res.overig!=='null')ppCache[ckey].overig=res.overig;}if(pg)pg.textContent='Check klaar: '+pt;showProjectTable(key);updateDb();}catch(e){if(pg)pg.textContent='Fout: '+pt;}}
-async function runCheckAll(key,pi){const pts=getPart(projectData[key][pi]);const pg=document.getElementById('ap-'+key+'-'+pi);for(let bi=0;bi<pts.length;bi++){const ckey=ck(key,pi,bi);if(!ppCache[ckey]||!ppCache[ckey].website)continue;if(pg)pg.textContent=(bi+1)+'/'+pts.length+' controleren...';await runCheck(key,pi,bi);await new Promise(r=>setTimeout(r,800));}if(pg)pg.textContent='Compliance checks klaar';updateDb();}
-function updateDb(){let c=0,nc=0;Object.values(ppCache).forEach(pp=>{if(pp.verwijzing!==undefined){(pp.verwijzing&&pp.eu_vlag&&pp.efro)?c++:nc++;}});document.getElementById('d-compliant').textContent=c;document.getElementById('d-non-compliant').textContent=nc;}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
