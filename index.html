@@ -58,5 +58,20 @@
 <script src="ijmond-data.js?v=1774858687020"></script>
 <script src="rijnmond-data.js?v=1774858687020"></script>
 <script src="app.js?v=1774873997934"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function doLogin() {
+    if (document.getElementById('pwd-input').value === 'PromotieENPubliciteit') {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+      if (typeof initApp === 'function') initApp();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+  document.getElementById('login-btn').addEventListener('click', doLogin);
+  document.getElementById('pwd-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+});
+</script>
 </body>
 </html>
