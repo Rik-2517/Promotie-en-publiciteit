@@ -55,13 +55,18 @@ function initApp() {
   document.getElementById('ds-ijmond-partners').textContent = projectData.ijmond.reduce(function(s,p) { return s + getPart(p).length; }, 0);
   document.getElementById('ds-rijnmond-partners').textContent = projectData.rijnmond.reduce(function(s,p) { return s + getPart(p).length; }, 0);
   document.getElementById('header-status').innerHTML = '<span class="status-dot green"></span>' + tot + ' projecten geladen';
+  // Activeer Rijnmond tab standaard
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
+  var rBtn = document.getElementById('tab-btn-rijnmond'); if(rBtn) rBtn.classList.add('active');
+  var rTab = document.getElementById('tab-rijnmond'); if(rTab) rTab.classList.add('active');
 
-  ['kvw3','ijmond','rijnmond'].forEach(function(key) {
+  ['rijnmond','kvw3','ijmond'].forEach(function(key) {
     var sel = document.getElementById(key + '-select');
     projectData[key].forEach(function(p, i) {
       var o = document.createElement('option');
       o.value = i;
-      o.textContent = (p['Projectnummer'] || '') + ' — ' + (p['Projectnaam'] || '');
+      o.textContent = (p['Projectnummer'] || '') + ' â ' + (p['Projectnaam'] || '');
       sel.appendChild(o);
     });
     sel.addEventListener('change', function() { showProjectTable(key); });
