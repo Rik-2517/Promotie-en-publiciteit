@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Promotie & Publiciteit Monitor</title>
 <style>
-:root{--eu-blue:#003399;--eu-yellow:#FFCC00;--light:#e8eef8;--green:#28a745;--red:#dc3545;}
+:root{--eu-blue:#003399;--eu-yellow:#FFCC00;--light:#e8eef8;--green:#28a745;--red:#dc3545;--orange:#fd7e14;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;background:#fff;color:#222;}
 #login-screen{position:fixed;inset:0;background:var(--eu-blue);display:flex;align-items:center;justify-content:center;z-index:9999;}
@@ -23,52 +23,81 @@ header{background:var(--eu-blue);color:#fff;padding:16px 28px;display:flex;align
 .header-status{margin-left:auto;background:rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;font-size:12px;}
 .sdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
 .sdot.green{background:#4caf50;}.sdot.orange{background:var(--eu-yellow);}
-.tabs{background:var(--eu-blue);display:flex;padding:0 28px;border-bottom:1px solid rgba(255,255,255,.15);}
+.tabs{background:var(--eu-blue);display:flex;padding:0 28px;border-bottom:1px solid rgba(255,255,255,.15);overflow-x:auto;}
 .tab{color:rgba(255,255,255,.65);padding:13px 20px;cursor:pointer;font-size:14px;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
 .tab:hover{color:#fff;}.tab.active{color:var(--eu-yellow);border-bottom-color:var(--eu-yellow);font-weight:bold;}
 .content{padding:28px;max-width:1500px;margin:0 auto;}
 .tab-content{display:none;}.tab-content.active{display:block;}
-/* Dashboard */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px;}
-.card{background:var(--light);border-radius:10px;padding:20px 16px;text-align:center;border-left:4px solid var(--eu-blue);}
-.card .n{font-size:36px;font-weight:bold;color:var(--eu-blue);}.card .l{font-size:12px;color:#555;margin-top:4px;}
+/* Dashboard cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:28px;}
+.card{background:var(--light);border-radius:10px;padding:18px 14px;text-align:center;border-left:4px solid var(--eu-blue);}
+.card .n{font-size:34px;font-weight:bold;color:var(--eu-blue);}.card .l{font-size:11px;color:#555;margin-top:4px;}
+.card.green-card{border-left-color:var(--green);}.card.green-card .n{color:var(--green);}
+.card.orange-card{border-left-color:var(--orange);}.card.orange-card .n{color:var(--orange);}
+.card.red-card{border-left-color:var(--red);}.card.red-card .n{color:var(--red);}
+/* Stitle */
 .stitle{font-size:17px;font-weight:bold;color:var(--eu-blue);margin:0 0 14px;border-bottom:2px solid var(--eu-blue);padding-bottom:8px;}
-.note{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:12px 16px;font-size:13px;color:#5d4037;margin-top:20px;}
-/* Summary table */
-.sum-table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;border-radius:8px;overflow:hidden;border:1px solid #d0d9f0;}
-.sum-table th{background:var(--eu-blue);color:#fff;padding:10px 16px;text-align:left;font-size:13px;}
-.sum-table td{padding:10px 16px;border-bottom:1px solid #e8eef8;}
-.sum-table tr:last-child td{border-bottom:none;}
-.sum-table tr:hover td{background:#f0f4ff;}
-.sum-table .prog-num{font-weight:bold;color:var(--eu-blue);font-size:16px;}
-/* Per programma */
+/* Dashboard tabel */
+.dash-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:24px;border-radius:8px;overflow:hidden;border:1px solid #d0d9f0;}
+.dash-table th{background:var(--eu-blue);color:#fff;padding:10px 12px;text-align:left;font-size:12px;white-space:nowrap;}
+.dash-table td{padding:9px 12px;border-bottom:1px solid #e8eef8;vertical-align:middle;}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-table tr:hover td{background:#f0f4ff;}
+.dash-table .num{font-weight:bold;font-size:15px;}
+.num.green{color:var(--green);}.num.orange{color:var(--orange);}.num.red{color:var(--red);}
+/* Sub-tabel voor uitsplitsing */
+.sub-detail{font-size:11px;color:#666;margin-top:4px;}
+/* Per-tab programma header */
 .prog-header{background:var(--light);border-radius:10px;padding:16px 20px;margin-bottom:20px;border-left:4px solid var(--eu-blue);}
-.prog-header h2{color:var(--eu-blue);font-size:17px;}.prog-header .sub{font-size:12px;color:#666;margin-top:2px;}
-.prog-stats-row{display:flex;gap:20px;margin-top:12px;flex-wrap:wrap;}
-.prog-stat{background:#fff;border-radius:8px;padding:10px 16px;text-align:center;border:1px solid #d0d9f0;min-width:90px;}
-.prog-stat .n{font-size:22px;font-weight:bold;color:var(--eu-blue);}.prog-stat .l{font-size:11px;color:#777;}
-.drop{margin-bottom:16px;}
+.prog-header h2{color:var(--eu-blue);font-size:17px;}
+.prog-header .sub{font-size:12px;color:#666;margin-top:2px;}
+.prog-stats-row{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;}
+.prog-stat{background:#fff;border-radius:8px;padding:8px 14px;text-align:center;border:1px solid #d0d9f0;min-width:80px;}
+.prog-stat .n{font-size:20px;font-weight:bold;}.prog-stat .l{font-size:10px;color:#777;}
+.prog-stat.green .n{color:var(--green);}.prog-stat.orange .n{color:var(--orange);}.prog-stat.red .n{color:var(--red);}
+/* Project dashboard */
+.proj-summary{background:var(--light);border-radius:10px;padding:14px 18px;margin-bottom:14px;}
+.proj-summary h4{color:var(--eu-blue);font-size:14px;margin-bottom:6px;}
+.proj-bars{display:flex;gap:10px;flex-wrap:wrap;}
+.proj-bar{font-size:11px;font-weight:bold;padding:3px 10px;border-radius:12px;color:#fff;}
+.proj-bar.green{background:var(--green);}.proj-bar.orange{background:var(--orange);}.proj-bar.red{background:var(--red);}.proj-bar.gray{background:#999;}
+/* Dropdown */
+.drop{margin-bottom:18px;}
 .drop label{display:block;font-weight:bold;color:var(--eu-blue);margin-bottom:6px;font-size:14px;}
 .drop select{width:100%;max-width:600px;padding:10px 14px;border:2px solid var(--eu-blue);border-radius:8px;font-size:14px;background:#fff;cursor:pointer;}
-.abar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
-.abtn{padding:9px 16px;border:none;border-radius:8px;font-size:13px;font-weight:bold;cursor:pointer;transition:all .2s;}
-.abtn.blue{background:var(--eu-blue);color:#fff;}.abtn.blue:hover{background:#002270;}
-.abtn.green{background:var(--green);color:#fff;}.abtn.green:hover{background:#1e7e34;}
-.aprog{font-size:12px;color:#555;background:var(--light);border-radius:6px;padding:6px 12px;}
-.twrap{overflow-x:auto;border-radius:8px;border:1px solid #d0d9f0;}
+/* Table */
+.twrap{overflow-x:auto;border-radius:8px;border:1px solid #d0d9f0;margin-bottom:16px;}
 table.ptable{width:100%;border-collapse:collapse;font-size:13px;min-width:900px;}
 table.ptable thead tr{background:var(--eu-blue);}
-table.ptable th{color:#fff;padding:10px 12px;text-align:left;font-size:12px;font-weight:bold;white-space:nowrap;}
-table.ptable td{padding:9px 12px;border-bottom:1px solid #e8eef8;vertical-align:middle;}
+table.ptable th{color:#fff;padding:10px 12px;text-align:center;font-size:12px;font-weight:bold;white-space:nowrap;}
+table.ptable th:first-child{text-align:left;}
+table.ptable td{padding:9px 12px;border-bottom:1px solid #e8eef8;vertical-align:middle;text-align:center;}
+table.ptable td:first-child{text-align:left;}
 table.ptable tr:hover td{background:#f0f4ff;}
 .dot{display:inline-block;width:13px;height:13px;border-radius:50%;vertical-align:middle;}
-.dot.green{background:var(--green);}.dot.red{background:var(--red);}.dot.gray{background:#ccc;}
+.dot.green{background:var(--green);}.dot.red{background:var(--red);}.dot.orange{background:var(--orange);}.dot.gray{background:#ccc;}
+/* Links onder bolletjes */
+.dot-links{display:block;margin-top:3px;}
+.dot-links a{display:block;color:var(--eu-blue);font-size:10px;text-decoration:none;word-break:break-all;}
+.dot-links a:hover{text-decoration:underline;}
 a.ul{color:var(--eu-blue);font-size:12px;word-break:break-all;text-decoration:none;}
 a.ul:hover{text-decoration:underline;}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid #ccc;border-top-color:var(--eu-blue);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .lbar{background:var(--light);border-radius:8px;padding:20px;text-align:center;color:var(--eu-blue);font-weight:bold;margin-bottom:16px;}
-.divider{height:1px;background:#d0d9f0;margin:24px 0;}
+.divider{height:1px;background:#d0d9f0;margin:20px 0;}
+.note{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:12px 16px;font-size:13px;color:#5d4037;margin-bottom:20px;}
+/* Regelgeving tab */
+.reg-section{background:#fff;border:1px solid #d0d9f0;border-radius:10px;padding:20px;margin-bottom:20px;}
+.reg-section h3{color:var(--eu-blue);font-size:15px;margin-bottom:10px;border-bottom:1px solid #d0d9f0;padding-bottom:8px;}
+.reg-section h4{color:var(--eu-blue);font-size:13px;margin:12px 0 6px;}
+.reg-section p,.reg-section li{font-size:13px;color:#333;line-height:1.6;margin-bottom:6px;}
+.reg-section ul{padding-left:20px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0;}
+.check-item:last-child{border-bottom:none;}
+.check-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.check-text{font-size:13px;color:#333;}
+.check-text strong{color:var(--eu-blue);}
 </style>
 </head>
 <body>
@@ -99,6 +128,7 @@ a.ul:hover{text-decoration:underline;}
     <div class="tab" id="tbtn-kvw3">Kansen voor West III</div>
     <div class="tab" id="tbtn-ijmond">JTF IJmond</div>
     <div class="tab" id="tbtn-rijnmond">JTF Rijnmond</div>
+    <div class="tab" id="tbtn-regelgeving">&#128218; Regelgeving</div>
   </div>
 
   <div class="content">
@@ -110,49 +140,83 @@ a.ul:hover{text-decoration:underline;}
         <div class="card"><div class="n" id="dKvw3">&mdash;</div><div class="l">Kansen voor West III</div></div>
         <div class="card"><div class="n" id="dIjmond">&mdash;</div><div class="l">JTF IJmond</div></div>
         <div class="card"><div class="n" id="dRijnmond">&mdash;</div><div class="l">JTF Rijnmond</div></div>
-        <div class="card"><div class="n" id="dOk">0</div><div class="l">&#10003; Volledig compliant</div></div>
-        <div class="card"><div class="n" id="dDeels">0</div><div class="l">&#9899; Deels compliant</div></div>
-        <div class="card"><div class="n" id="dNok">0</div><div class="l">&#10007; Niet compliant</div></div>
+        <div class="card green-card"><div class="n" id="dOk">0</div><div class="l">&#10003; Volledig compliant</div></div>
+        <div class="card orange-card"><div class="n" id="dDeels">0</div><div class="l">&#11044; Deels compliant</div></div>
+        <div class="card red-card"><div class="n" id="dNok">0</div><div class="l">&#10007; Niet compliant</div></div>
       </div>
+
       <div class="stitle">Overzicht per programma</div>
-      <table class="sum-table">
+      <table class="dash-table">
         <thead>
-          <tr><th>Programma</th><th>Projecten</th><th>Partners</th><th>Volledig</th><th>Deels</th><th>Niet compliant</th><th>Bron</th></tr>
+          <tr>
+            <th>Programma</th>
+            <th>Projecten</th>
+            <th>Partners</th>
+            <th>&#10003; Volledig</th>
+            <th>&#11044; Deels</th>
+            <th>&#10007; Niet compliant</th>
+            <th style="min-width:180px">Uitsplitsing checks</th>
+            <th>Bron</th>
+          </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Kansen voor West III</strong><br><span style="font-size:11px;color:#666">EFRO 2021&ndash;2027 | West-Nederland</span></td>
-            <td class="prog-num" id="s-kvw3-p">&mdash;</td>
-            <td class="prog-num" id="s-kvw3-b">&mdash;</td>
-            <td class="prog-num" id="s-kvw3-ok">0</td>
-            <td class="prog-num" id="s-kvw3-deels">0</td>
-            <td class="prog-num" id="s-kvw3-nok">0</td>
+            <td class="num" id="s-kvw3-p">&mdash;</td>
+            <td class="num" id="s-kvw3-b">&mdash;</td>
+            <td class="num green" id="s-kvw3-ok">0</td>
+            <td class="num orange" id="s-kvw3-deels">0</td>
+            <td class="num red" id="s-kvw3-nok">0</td>
+            <td>
+              <div class="sub-detail">&#128279; Verwijzing: <span id="s-kvw3-verw">0</span></div>
+              <div class="sub-detail">&#127466;&#127482; EU-vlag: <span id="s-kvw3-eu">0</span></div>
+              <div class="sub-detail">&#128240; Artikel: <span id="s-kvw3-art">0</span></div>
+              <div class="sub-detail">&#128100; LinkedIn: <span id="s-kvw3-li">0</span></div>
+              <div class="sub-detail">&#120143; Twitter: <span id="s-kvw3-tw">0</span></div>
+              <div class="sub-detail">&#127760; Overig: <span id="s-kvw3-ov">0</span></div>
+            </td>
             <td><a href="https://kvw3.kansenvoorwest.nl/projecten/projecten-kansen-voor-west-iii/" target="_blank" class="ul">kvw3.kansenvoorwest.nl</a></td>
           </tr>
           <tr>
             <td><strong>JTF IJmond</strong><br><span style="font-size:11px;color:#666">Just Transition Fund | Noord-Holland</span></td>
-            <td class="prog-num" id="s-ijmond-p">&mdash;</td>
-            <td class="prog-num" id="s-ijmond-b">&mdash;</td>
-            <td class="prog-num" id="s-ijmond-ok">0</td>
-            <td class="prog-num" id="s-ijmond-deels">0</td>
-            <td class="prog-num" id="s-ijmond-nok">0</td>
+            <td class="num" id="s-ijmond-p">&mdash;</td>
+            <td class="num" id="s-ijmond-b">&mdash;</td>
+            <td class="num green" id="s-ijmond-ok">0</td>
+            <td class="num orange" id="s-ijmond-deels">0</td>
+            <td class="num red" id="s-ijmond-nok">0</td>
+            <td>
+              <div class="sub-detail">&#128279; Verwijzing: <span id="s-ijmond-verw">0</span></div>
+              <div class="sub-detail">&#127466;&#127482; EU-vlag: <span id="s-ijmond-eu">0</span></div>
+              <div class="sub-detail">&#128240; Artikel: <span id="s-ijmond-art">0</span></div>
+              <div class="sub-detail">&#128100; LinkedIn: <span id="s-ijmond-li">0</span></div>
+              <div class="sub-detail">&#120143; Twitter: <span id="s-ijmond-tw">0</span></div>
+              <div class="sub-detail">&#127760; Overig: <span id="s-ijmond-ov">0</span></div>
+            </td>
             <td><a href="https://jtf-ijmond.kansenvoorwest.nl/projecten/projecten-jtf-ijmond/" target="_blank" class="ul">jtf-ijmond.kansenvoorwest.nl</a></td>
           </tr>
           <tr>
             <td><strong>JTF Rijnmond</strong><br><span style="font-size:11px;color:#666">Just Transition Fund | Zuid-Holland</span></td>
-            <td class="prog-num" id="s-rijnmond-p">&mdash;</td>
-            <td class="prog-num" id="s-rijnmond-b">&mdash;</td>
-            <td class="prog-num" id="s-rijnmond-ok">0</td>
-            <td class="prog-num" id="s-rijnmond-deels">0</td>
-            <td class="prog-num" id="s-rijnmond-nok">0</td>
+            <td class="num" id="s-rijnmond-p">&mdash;</td>
+            <td class="num" id="s-rijnmond-b">&mdash;</td>
+            <td class="num green" id="s-rijnmond-ok">0</td>
+            <td class="num orange" id="s-rijnmond-deels">0</td>
+            <td class="num red" id="s-rijnmond-nok">0</td>
+            <td>
+              <div class="sub-detail">&#128279; Verwijzing: <span id="s-rijnmond-verw">0</span></div>
+              <div class="sub-detail">&#127466;&#127482; EU-vlag: <span id="s-rijnmond-eu">0</span></div>
+              <div class="sub-detail">&#128240; Artikel: <span id="s-rijnmond-art">0</span></div>
+              <div class="sub-detail">&#128100; LinkedIn: <span id="s-rijnmond-li">0</span></div>
+              <div class="sub-detail">&#120143; Twitter: <span id="s-rijnmond-tw">0</span></div>
+              <div class="sub-detail">&#127760; Overig: <span id="s-rijnmond-ov">0</span></div>
+            </td>
             <td><a href="https://jtf-rijnmond.kansenvoorwest.nl/projecten/projecten-jtf-rijnmond/" target="_blank" class="ul">jtf-rijnmond.kansenvoorwest.nl</a></td>
           </tr>
         </tbody>
       </table>
-      <div class="note">VO.2021/1060 Art.47-50: Begunstigden tonen de EU-vlag met "Medegefinancierd door de Europese Unie" en verwijzen op hun website naar het project. Gebruik de tabbladen per programma om projecten te selecteren en agents te starten.</div>
+      <div class="note">VO.2021/1060 Art.47-50: Begunstigden tonen de EU-vlag met "Medegefinancierd door de Europese Unie" en verwijzen op hun website naar het project. Selecteer een programma-tabblad om projecten te inspecteren.</div>
     </div>
 
-    <!-- KANSEN VOOR WEST III -->
+    <!-- KVW3 -->
     <div id="tab-kvw3" class="tab-content">
       <div class="prog-header">
         <h2>Kansen voor West III</h2>
@@ -160,20 +224,21 @@ a.ul:hover{text-decoration:underline;}
         <div class="prog-stats-row">
           <div class="prog-stat"><div class="n" id="ps-kvw3-p">&mdash;</div><div class="l">Projecten</div></div>
           <div class="prog-stat"><div class="n" id="ps-kvw3-b">&mdash;</div><div class="l">Partners</div></div>
-          <div class="prog-stat"><div class="n" id="ps-kvw3-ok">0</div><div class="l">&#10003; Volledig</div></div>
-          <div class="prog-stat"><div class="n" id="ps-kvw3-deels">0</div><div class="l">&#9899; Deels</div></div>
-          <div class="prog-stat"><div class="n" id="ps-kvw3-nok">0</div><div class="l">&#10007; Niet compliant</div></div>
+          <div class="prog-stat green"><div class="n" id="ps-kvw3-ok">0</div><div class="l">&#10003; Volledig</div></div>
+          <div class="prog-stat orange"><div class="n" id="ps-kvw3-deels">0</div><div class="l">&#11044; Deels</div></div>
+          <div class="prog-stat red"><div class="n" id="ps-kvw3-nok">0</div><div class="l">&#10007; Niet</div></div>
         </div>
       </div>
       <div class="divider"></div>
       <div id="kvw3-load" class="lbar"><span class="spin"></span> Laden...</div>
       <div id="kvw3-ui" style="display:none">
         <div class="drop"><label>Selecteer een project:</label><select id="sel-kvw3"><option value="">&mdash; Kies een project &mdash;</option></select></div>
+        <div id="proj-dash-kvw3"></div>
         <div id="area-kvw3"></div>
       </div>
     </div>
 
-    <!-- JTF IJMOND -->
+    <!-- IJMOND -->
     <div id="tab-ijmond" class="tab-content">
       <div class="prog-header">
         <h2>JTF IJmond</h2>
@@ -181,20 +246,21 @@ a.ul:hover{text-decoration:underline;}
         <div class="prog-stats-row">
           <div class="prog-stat"><div class="n" id="ps-ijmond-p">&mdash;</div><div class="l">Projecten</div></div>
           <div class="prog-stat"><div class="n" id="ps-ijmond-b">&mdash;</div><div class="l">Partners</div></div>
-          <div class="prog-stat"><div class="n" id="ps-ijmond-ok">0</div><div class="l">&#10003; Volledig</div></div>
-          <div class="prog-stat"><div class="n" id="ps-ijmond-deels">0</div><div class="l">&#9899; Deels</div></div>
-          <div class="prog-stat"><div class="n" id="ps-ijmond-nok">0</div><div class="l">&#10007; Niet compliant</div></div>
+          <div class="prog-stat green"><div class="n" id="ps-ijmond-ok">0</div><div class="l">&#10003; Volledig</div></div>
+          <div class="prog-stat orange"><div class="n" id="ps-ijmond-deels">0</div><div class="l">&#11044; Deels</div></div>
+          <div class="prog-stat red"><div class="n" id="ps-ijmond-nok">0</div><div class="l">&#10007; Niet</div></div>
         </div>
       </div>
       <div class="divider"></div>
       <div id="ijmond-load" class="lbar"><span class="spin"></span> Laden...</div>
       <div id="ijmond-ui" style="display:none">
         <div class="drop"><label>Selecteer een project:</label><select id="sel-ijmond"><option value="">&mdash; Kies een project &mdash;</option></select></div>
+        <div id="proj-dash-ijmond"></div>
         <div id="area-ijmond"></div>
       </div>
     </div>
 
-    <!-- JTF RIJNMOND -->
+    <!-- RIJNMOND -->
     <div id="tab-rijnmond" class="tab-content">
       <div class="prog-header">
         <h2>JTF Rijnmond</h2>
@@ -202,16 +268,89 @@ a.ul:hover{text-decoration:underline;}
         <div class="prog-stats-row">
           <div class="prog-stat"><div class="n" id="ps-rijnmond-p">&mdash;</div><div class="l">Projecten</div></div>
           <div class="prog-stat"><div class="n" id="ps-rijnmond-b">&mdash;</div><div class="l">Partners</div></div>
-          <div class="prog-stat"><div class="n" id="ps-rijnmond-ok">0</div><div class="l">&#10003; Volledig</div></div>
-          <div class="prog-stat"><div class="n" id="ps-rijnmond-deels">0</div><div class="l">&#9899; Deels</div></div>
-          <div class="prog-stat"><div class="n" id="ps-rijnmond-nok">0</div><div class="l">&#10007; Niet compliant</div></div>
+          <div class="prog-stat green"><div class="n" id="ps-rijnmond-ok">0</div><div class="l">&#10003; Volledig</div></div>
+          <div class="prog-stat orange"><div class="n" id="ps-rijnmond-deels">0</div><div class="l">&#11044; Deels</div></div>
+          <div class="prog-stat red"><div class="n" id="ps-rijnmond-nok">0</div><div class="l">&#10007; Niet</div></div>
         </div>
       </div>
       <div class="divider"></div>
       <div id="rijnmond-load" class="lbar"><span class="spin"></span> Laden...</div>
       <div id="rijnmond-ui" style="display:none">
         <div class="drop"><label>Selecteer een project:</label><select id="sel-rijnmond"><option value="">&mdash; Kies een project &mdash;</option></select></div>
+        <div id="proj-dash-rijnmond"></div>
         <div id="area-rijnmond"></div>
+      </div>
+    </div>
+
+    <!-- REGELGEVING -->
+    <div id="tab-regelgeving" class="tab-content">
+      <div class="reg-section">
+        <h3>&#128218; Relevante regelgeving: VO.2021/1060 &amp; EFRO-handboek</h3>
+        <p>De verplichting voor begunstigden om hun project te communiceren is vastgelegd in <strong>Verordening (EU) 2021/1060</strong> (de Algemene Structuurfondsverordening), aangevuld door het <strong>EFRO-handboek West-Nederland</strong> en de <strong>JTF-handboeken</strong>.</p>
+        <h4>Artikel 47 &mdash; Zichtbaarheid van steun</h4>
+        <p>Begunstigden erkennen de steun uit de fondsen door het EU-embleem te vermelden op alle communicatie. Het EU-embleem moet vergezeld gaan van de verklaring: <em>"Medegefinancierd door de Europese Unie"</em>.</p>
+        <h4>Artikel 49 &mdash; Communicatieverplichtingen voor begunstigden</h4>
+        <ul>
+          <li>Op de officiële website (indien aanwezig): een korte omschrijving van het project, de doelen en resultaten, en de financiële bijdrage van de EU.</li>
+          <li>Op sociale mediakanalen: vermelding van het project met EU-financiering.</li>
+          <li>Tijdelijk bord of plaquette bij fysieke projecten.</li>
+          <li>Documenten en communicatiemateriaal gericht op het publiek of deelnemers moeten het EU-embleem bevatten.</li>
+        </ul>
+        <h4>Artikel 50 &mdash; Verplichtingen voor beheersautoriteiten</h4>
+        <p>De beheersautoriteit (Kansen voor West) controleert of begunstigden aan hun publiciteitseisen voldoen en kan bij niet-naleving financiële correcties toepassen.</p>
+      </div>
+
+      <div class="reg-section">
+        <h3>&#128269; Checks die de monitor uitvoert per projectpartner</h3>
+        <p>De monitor beoordeelt de website en sociale media van elke projectpartner op de volgende punten. De checks betreffen de <strong>inhoud van de website en LinkedIn/sociale media</strong> &mdash; niet de URL of het bestaan van een website.</p>
+
+        <div class="check-item">
+          <div class="check-icon">&#128279;</div>
+          <div class="check-text">
+            <strong>Verwijzing naar het project</strong><br>
+            Is er op de website een pagina, artikel of sectie die het JTF/EFRO-project beschrijft? Worden het projectdoel, de resultaten en het ontvangen subsidiebedrag vermeld conform art. 49 lid 1?
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#127466;&#127482;</div>
+          <div class="check-text">
+            <strong>EU-vlag + "Medegefinancierd door de Europese Unie"</strong><br>
+            Staat het EU-embleem zichtbaar op de website, vergezeld van de exacte tekst "Medegefinancierd door de Europese Unie" (of "Co-funded by the European Union" bij Engelstalige communicatie)? Conform art. 47 en Annex IX van VO.2021/1060.
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#128240;</div>
+          <div class="check-text">
+            <strong>EFRO/JTF/Kansen voor West/Europa artikel</strong><br>
+            Bevat de website een of meer artikelen of pagina's met de termen "EFRO", "Europees Fonds voor Regionale Ontwikkeling", "JTF", "Just Transition Fund", "Kansen voor West" of "Europa" in de context van de subsidie? De monitor noteert de directe URL van het meest relevante artikel.
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#128100;</div>
+          <div class="check-text">
+            <strong>LinkedIn</strong><br>
+            Heeft de organisatie een actieve LinkedIn-pagina? Wordt het project of de EU-financiering vermeld in LinkedIn-berichten of de bedrijfsbeschrijving? De monitor noteert de LinkedIn URL en relevante posts.
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#120143;</div>
+          <div class="check-text">
+            <strong>Twitter/X</strong><br>
+            Heeft de organisatie een actief Twitter/X-account? Worden het project of de EU-financiering vermeld? De monitor noteert de URL en relevante berichten.
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="check-icon">&#127760;</div>
+          <div class="check-text">
+            <strong>Overige sociale media</strong><br>
+            Zijn er andere sociale mediakanalen (Facebook, Instagram, YouTube, e.d.) waar het project of de EU-financiering vermeld wordt? De monitor noteert de vindplaats.
+          </div>
+        </div>
+
+        <h4 style="margin-top:16px;">Conclusie per project</h4>
+        <p>Een project is <span style="color:var(--green);font-weight:bold">volledig compliant</span> als alle projectpartners voldoen aan de drie kernvereisten (verwijzing, EU-vlag, EFRO-vermelding).</p>
+        <p>Een project is <span style="color:var(--orange);font-weight:bold">deels compliant</span> als minimaal één maar niet alle partners aan alle vereisten voldoen.</p>
+        <p>Een project is <span style="color:var(--red);font-weight:bold">niet compliant</span> als geen enkele partner aan alle kernvereisten voldoet.</p>
       </div>
     </div>
 
@@ -222,7 +361,7 @@ a.ul:hover{text-decoration:underline;}
 <script src="kvw3-data.js"></script>
 <script src="ijmond-data.js"></script>
 <script src="rijnmond-data.js"></script>
-<script src="rijnmond-results-1774876436525.js"></script>
+<script src="rijnmond-results.js?v=1774890440704"></script>
 <script>
 (function() {
   // LOGIN
@@ -239,7 +378,7 @@ a.ul:hover{text-decoration:underline;}
   document.getElementById('pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
 
   // TABS
-  ['dashboard','kvw3','ijmond','rijnmond'].forEach(function(n) {
+  ['dashboard','kvw3','ijmond','rijnmond','regelgeving'].forEach(function(n) {
     document.getElementById('tbtn-' + n).addEventListener('click', function() {
       document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
       document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
@@ -251,30 +390,39 @@ a.ul:hover{text-decoration:underline;}
   var pdata = { kvw3: [], ijmond: [], rijnmond: [] };
   var cache = {};
 
-    // Laad resultaten vanuit alle RESULTS variabelen
-    ['RIJNMOND_RESULTS','IJMOND_RESULTS','KVW3_RESULTS'].forEach(function(varName) {
-      var prefix = varName.replace('_RESULTS','').toLowerCase();
-      if (window[varName]) {
-        Object.keys(window[varName]).forEach(function(k) {
-          var parts = k.replace('pi','').split('_bi');
-          var pi = parseInt(parts[0]), bi = parseInt(parts[1]);
-          cache[prefix + '_' + pi + '_' + bi] = window[varName][k];
-        });
-      }
+  // Laad Rijnmond resultaten in cache
+  if (window.RIJNMOND_RESULTS) {
+    Object.keys(window.RIJNMOND_RESULTS).forEach(function(k) {
+      var parts = k.replace('pi','').split('_bi');
+      var pi = parseInt(parts[0]), bi = parseInt(parts[1]);
+      cache['rijnmond_' + pi + '_' + bi] = window.RIJNMOND_RESULTS[k];
     });
-    updateDash();
+  }
 
   function parts(p) { return (p['Begunstigden'] || '').split('|').map(function(s) { return s.trim(); }).filter(Boolean); }
   function ck(k, pi, bi) { return k + '_' + pi + '_' + bi; }
-  function dot(v) {
-    if (v === true) return '<span class="dot green"></span>';
-    if (v === false) return '<span class="dot red"></span>';
-    return '<span class="dot gray"></span>';
+
+  function dot(v, cls) {
+    var c = v === true ? 'green' : (v === false ? 'red' : (cls || 'gray'));
+    return '<span class="dot ' + c + '"></span>';
+  }
+
+  function dotWithLinks(v, links) {
+    // v: true/false/null, links: array van URLs
+    var validLinks = (links || []).filter(Boolean);
+    var d = dot(v);
+    if (validLinks.length > 0 && v === true) {
+      d += '<span class="dot-links">' + validLinks.map(function(l) {
+        var label = l.replace(/^https?://(www.)?/, '').split('/')[0];
+        return '<a href="' + l + '" target="_blank">' + label + '</a>';
+      }).join('') + '</span>';
+    }
+    return d;
   }
 
   function startApp() {
     if (!window.KVW3DATA || !window.IJMONDDATA || !window.RIJNMONDDATA) {
-      document.getElementById('hstatus').innerHTML = '<span class="sdot orange"></span>Data ontbreekt &mdash; herlaad de pagina';
+      document.getElementById('hstatus').innerHTML = '<span class="sdot orange"></span>Data ontbreekt';
       return;
     }
     pdata.kvw3 = window.KVW3DATA;
@@ -282,202 +430,178 @@ a.ul:hover{text-decoration:underline;}
     pdata.rijnmond = window.RIJNMONDDATA;
 
     var tot = pdata.kvw3.length + pdata.ijmond.length + pdata.rijnmond.length;
-
-    // Dashboard kaarten
     document.getElementById('dTot').textContent = tot;
     document.getElementById('dKvw3').textContent = pdata.kvw3.length;
     document.getElementById('dIjmond').textContent = pdata.ijmond.length;
     document.getElementById('dRijnmond').textContent = pdata.rijnmond.length;
 
-    // Dashboard tabel totalen
     var kvw3b = pdata.kvw3.reduce(function(s,p){return s+parts(p).length;},0);
-    var ijmondb = pdata.ijmond.reduce(function(s,p){return s+parts(p).length;},0);
-    var rijnmondb = pdata.rijnmond.reduce(function(s,p){return s+parts(p).length;},0);
+    var ijb = pdata.ijmond.reduce(function(s,p){return s+parts(p).length;},0);
+    var rjb = pdata.rijnmond.reduce(function(s,p){return s+parts(p).length;},0);
     document.getElementById('s-kvw3-p').textContent = pdata.kvw3.length;
     document.getElementById('s-kvw3-b').textContent = kvw3b;
     document.getElementById('s-ijmond-p').textContent = pdata.ijmond.length;
-    document.getElementById('s-ijmond-b').textContent = ijmondb;
+    document.getElementById('s-ijmond-b').textContent = ijb;
     document.getElementById('s-rijnmond-p').textContent = pdata.rijnmond.length;
-    document.getElementById('s-rijnmond-b').textContent = rijnmondb;
-
-    // Per-programma stats
+    document.getElementById('s-rijnmond-b').textContent = rjb;
     document.getElementById('ps-kvw3-p').textContent = pdata.kvw3.length;
     document.getElementById('ps-kvw3-b').textContent = kvw3b;
     document.getElementById('ps-ijmond-p').textContent = pdata.ijmond.length;
-    document.getElementById('ps-ijmond-b').textContent = ijmondb;
+    document.getElementById('ps-ijmond-b').textContent = ijb;
     document.getElementById('ps-rijnmond-p').textContent = pdata.rijnmond.length;
-    document.getElementById('ps-rijnmond-b').textContent = rijnmondb;
-
+    document.getElementById('ps-rijnmond-b').textContent = rjb;
     document.getElementById('hstatus').innerHTML = '<span class="sdot green"></span>' + tot + ' projecten geladen';
 
-    // Dropdowns vullen en UI tonen
     ['kvw3','ijmond','rijnmond'].forEach(function(key) {
       var sel = document.getElementById('sel-' + key);
       pdata[key].forEach(function(p, i) {
         var o = document.createElement('option');
         o.value = i;
-        o.textContent = (p['Projectnummer']||'') + ' ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ ' + (p['Projectnaam']||'');
+        // Fix: gebruik alleen alfanumeriek voor label, geen underscores
+        o.textContent = (p['Projectnummer'] || '') + ' — ' + (p['Projectnaam'] || '');
         sel.appendChild(o);
       });
       sel.addEventListener('change', function() { showTable(key); });
       document.getElementById(key + '-load').style.display = 'none';
       document.getElementById(key + '-ui').style.display = 'block';
     });
+
+    updateDash();
+  }
+
+  function getScore(c) {
+    if (!c) return -1; // onbekend
+    var checks = [c.verwijzing, c.eu_vlag, c.efro];
+    var defined = checks.filter(function(x) { return x !== null && x !== undefined; });
+    if (defined.length === 0) return -1;
+    var trues = checks.filter(function(x) { return x === true; }).length;
+    if (trues === 3) return 3; // volledig
+    if (trues > 0) return trues; // deels
+    return 0; // niet
+  }
+
+  function updateDash() {
+    var totOk=0, totDeels=0, totNok=0;
+    var per = {
+      kvw3:   {ok:0,deels:0,nok:0,verw:0,eu:0,art:0,li:0,tw:0,ov:0},
+      ijmond: {ok:0,deels:0,nok:0,verw:0,eu:0,art:0,li:0,tw:0,ov:0},
+      rijnmond:{ok:0,deels:0,nok:0,verw:0,eu:0,art:0,li:0,tw:0,ov:0}
+    };
+    Object.keys(cache).forEach(function(ckey) {
+      var c = cache[ckey];
+      var key = ckey.split('_')[0];
+      if (!per[key]) return;
+      if (c.verwijzing !== undefined && c.verwijzing !== null) {
+        var score = getScore(c);
+        if (score === 3) { totOk++; per[key].ok++; }
+        else if (score > 0) { totDeels++; per[key].deels++; }
+        else if (score === 0) { totNok++; per[key].nok++; }
+        if (c.verwijzing === true) per[key].verw++;
+        if (c.eu_vlag === true) per[key].eu++;
+        if (c.artikel_url) per[key].art++;
+        if (c.linkedin) per[key].li++;
+        if (c.twitter) per[key].tw++;
+        if (c.overig) per[key].ov++;
+      }
+    });
+
+    document.getElementById('dOk').textContent = totOk;
+    document.getElementById('dDeels').textContent = totDeels;
+    document.getElementById('dNok').textContent = totNok;
+
+    ['kvw3','ijmond','rijnmond'].forEach(function(key) {
+      var p = per[key];
+      ['ok','deels','nok'].forEach(function(t) {
+        var e1 = document.getElementById('s-'+key+'-'+t); if(e1) e1.textContent = p[t];
+        var e2 = document.getElementById('ps-'+key+'-'+t); if(e2) e2.textContent = p[t];
+      });
+      var fields = {verw:'verw',eu:'eu',art:'art',li:'li',tw:'tw',ov:'ov'};
+      Object.keys(fields).forEach(function(f) {
+        var el = document.getElementById('s-'+key+'-'+f); if(el) el.textContent = p[f];
+      });
+    });
   }
 
   function showTable(key) {
     var idx = document.getElementById('sel-' + key).value;
     var area = document.getElementById('area-' + key);
-    if (!idx) { area.innerHTML = ''; return; }
+    var dashArea = document.getElementById('proj-dash-' + key);
+    if (!idx) { area.innerHTML = ''; dashArea.innerHTML = ''; return; }
     var p = pdata[key][parseInt(idx)];
     var pts = parts(p);
-    var adrs = (p['Adresgegevens begunstigden']||'').split('|').map(function(s){return s.trim();});
+    var adrs = (p['Adresgegevens begunstigden'] || '').split('|').map(function(s) { return s.trim(); });
 
+    // Project dashboard - totalen over partners
+    var projOk=0, projDeels=0, projNok=0, projVerw=0, projEu=0, projArt=0, projLi=0, projTw=0, projOv=0;
+    pts.forEach(function(pt, bi) {
+      var c = cache[ck(key, idx, bi)] || {};
+      var score = getScore(c);
+      if (score === 3) projOk++;
+      else if (score > 0) projDeels++;
+      else if (score === 0) projNok++;
+      if (c.verwijzing === true) projVerw++;
+      if (c.eu_vlag === true) projEu++;
+      if (c.artikel_url) projArt++;
+      if (c.linkedin) projLi++;
+      if (c.twitter) projTw++;
+      if (c.overig) projOv++;
+    });
+
+    var projScore = projOk === pts.length ? 'green' : (projOk > 0 || projDeels > 0 ? 'orange' : 'red');
+    var projLabel = projScore === 'green' ? 'Volledig compliant' : (projScore === 'orange' ? 'Deels compliant' : 'Niet compliant');
+
+    dashArea.innerHTML = '<div class="proj-summary">'
+      + '<h4>' + (p['Projectnaam'] || '') + ' &mdash; ' + (p['Projectnummer'] || '') + '</h4>'
+      + '<div class="proj-bars">'
+      + '<span class="proj-bar ' + projScore + '">' + projLabel + '</span>'
+      + '<span class="proj-bar ' + (projVerw > 0 ? 'green' : 'gray') + '">&#128279; ' + projVerw + '/' + pts.length + ' verwijzing</span>'
+      + '<span class="proj-bar ' + (projEu > 0 ? 'green' : 'gray') + '">&#127466;&#127482; ' + projEu + '/' + pts.length + ' EU-vlag</span>'
+      + '<span class="proj-bar ' + (projArt > 0 ? 'green' : 'gray') + '">&#128240; ' + projArt + '/' + pts.length + ' artikel</span>'
+      + '<span class="proj-bar ' + (projLi > 0 ? 'green' : 'gray') + '">&#128100; ' + projLi + '/' + pts.length + ' LinkedIn</span>'
+      + '<span class="proj-bar ' + (projTw > 0 ? 'green' : 'gray') + '">&#120143; ' + projTw + '/' + pts.length + ' Twitter</span>'
+      + '<span class="proj-bar ' + (projOv > 0 ? 'green' : 'gray') + '">&#127760; ' + projOv + '/' + pts.length + ' Overig</span>'
+      + '</div></div>';
+
+    // Partner tabel
     var rows = pts.map(function(pt, bi) {
-      var c = cache[ck(key,idx,bi)] || {};
+      var c = cache[ck(key, idx, bi)] || {};
       var ws = c.website || '';
-      var wsd = ws ? '<a href="'+ws+'" target="_blank" class="ul">'+ws+'</a>' : '<em style="color:#aaa;font-size:11px">Niet gevonden</em>';
-      var fnd = !ws ? '<br><button class="abtn blue" style="padding:4px 10px;font-size:11px;margin-top:4px" data-k="'+key+'" data-pi="'+idx+'" data-bi="'+bi+'" data-a="find">Zoek</button>' : '';
-      var ad = c.artikel_url ? '<br><a href="'+c.artikel_url+'" target="_blank" class="ul" style="font-size:11px">Artikel</a>' : '';
-      var ld = c.linkedin ? '<a href="'+c.linkedin+'" target="_blank" class="ul">LinkedIn</a>' : '<em style="color:#aaa;font-size:11px">&mdash;</em>';
-      var tw = c.twitter ? '<a href="'+c.twitter+'" target="_blank" class="ul">Twitter/X</a>' : '<em style="color:#aaa;font-size:11px">&mdash;</em>';
-      var ov = c.overig ? '<span style="font-size:11px">'+c.overig+'</span>' : '<em style="color:#aaa;font-size:11px">&mdash;</em>';
-      var chk = ws ? '<button class="abtn green" style="padding:4px 10px;font-size:11px" data-k="'+key+'" data-pi="'+idx+'" data-bi="'+bi+'" data-a="check">&#10003;</button>' : '<em style="color:#aaa;font-size:11px">Eerst website</em>';
-      return '<tr><td><strong>'+pt+'</strong><br><span style="font-size:11px;color:#888">'+(adrs[bi]||'')+'</span></td>'
-        +'<td>'+wsd+fnd+'</td>'
-        +'<td style="text-align:center">'+dot(c.verwijzing)+'</td>'
-        +'<td style="text-align:center">'+dot(c.eu_vlag)+'</td>'
-        +'<td style="text-align:center">'+dot(c.efro)+ad+'</td>'
-        +'<td>'+ld+'</td><td>'+tw+'</td><td>'+ov+'</td><td>'+chk+'</td></tr>';
+      var wsd = ws ? '<a href="' + ws + '" target="_blank" class="ul">' + ws + '</a>' : '<em style="color:#aaa;font-size:11px">Niet gevonden</em>';
+      var score = getScore(c);
+      var rowColor = score === 3 ? '#f0fff4' : (score > 0 ? '#fffbf0' : (score === 0 ? '#fff5f5' : ''));
+
+      // Sociale media met meerdere links mogelijk
+      var liLinks = c.linkedin ? [c.linkedin] : [];
+      var twLinks = c.twitter ? [c.twitter] : [];
+      var ovLinks = c.overig ? [c.overig] : [];
+
+      return '<tr style="background:' + rowColor + '">'
+        + '<td><strong>' + pt + '</strong><br><span style="font-size:11px;color:#888">' + (adrs[bi]||'') + '</span></td>'
+        + '<td>' + wsd + '</td>'
+        + '<td>' + dot(c.verwijzing) + '</td>'
+        + '<td>' + dot(c.eu_vlag) + '</td>'
+        + '<td>' + (c.artikel_url ? dot(true) + '<span class="dot-links"><a href="' + c.artikel_url + '" target="_blank">' + c.artikel_url.replace(/^https?://(www.)?/,'').substring(0,30) + '</a></span>' : dot(c.efro)) + '</td>'
+        + '<td>' + dotWithLinks(c.linkedin ? true : null, liLinks) + '</td>'
+        + '<td>' + dotWithLinks(c.twitter ? true : null, twLinks) + '</td>'
+        + '<td>' + dotWithLinks(c.overig ? true : null, ovLinks) + '</td>'
+        + '</tr>';
     }).join('');
 
-    area.innerHTML = '<div style="margin-bottom:16px">'
-      +'<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:4px">'+(p['Projectnaam']||'')+'</h3>'
-      +'<p style="font-size:13px;color:#666">Nr: '+(p['Projectnummer']||'')+' &nbsp;|&nbsp; Penvoerder: '+(p['Penvoerder naam']||'')+', '+(p['Penvoerder stad']||'')+'</p>'
-      +'</div>'
-      +'<div class="abar">'
-      +'<button class="abtn blue" data-k="'+key+'" data-pi="'+idx+'" data-a="findall">&#128269; Zoek alle websites (Agent 2)</button>'
-      +'<button class="abtn green" data-k="'+key+'" data-pi="'+idx+'" data-a="checkall">&#10003; Check alle compliance (Agent 3)</button>'
-      +'<span class="aprog" id="prog-'+key+'-'+idx+'"></span>'
-      +'</div>'
-      +'<div class="twrap"><table class="ptable">'
-      +'<thead><tr><th>Projectpartner</th><th>Website</th><th>Verwijzing project</th><th>EU-vlag + vermelding</th><th>EFRO/JTF artikel</th><th>LinkedIn</th><th>Twitter/X</th><th>Overige media</th><th>Actie</th></tr></thead>'
-      +'<tbody>'+rows+'</tbody></table></div>'
-      +'<p style="font-size:11px;color:#888;margin-top:8px">VO.2021/1060 Art.47-50</p>';
-
-    area.querySelectorAll('[data-a]').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var k=this.dataset.k, pi=parseInt(this.dataset.pi), bi=this.dataset.bi!==undefined?parseInt(this.dataset.bi):null, a=this.dataset.a;
-        if(a==='find') agentFind(k,pi,bi);
-        else if(a==='check') agentCheck(k,pi,bi);
-        else if(a==='findall') agentFindAll(k,pi);
-        else if(a==='checkall') agentCheckAll(k,pi);
-      });
-    });
+    area.innerHTML = '<div class="twrap"><table class="ptable">'
+      + '<thead><tr>'
+      + '<th style="text-align:left">Projectpartner</th>'
+      + '<th>Website</th>'
+      + '<th>&#128279;<br>Verwijzing</th>'
+      + '<th>&#127466;&#127482;<br>EU-vlag</th>'
+      + '<th>&#128240;<br>Artikel</th>'
+      + '<th>&#128100;<br>LinkedIn</th>'
+      + '<th>&#120143;<br>Twitter/X</th>'
+      + '<th>&#127760;<br>Overig</th>'
+      + '</tr></thead>'
+      + '<tbody>' + rows + '</tbody></table></div>'
+      + '<p style="font-size:11px;color:#888;margin-top:8px">VO.2021/1060 Art.47-50 &mdash; Klik op het Regelgeving-tabblad voor meer informatie over de checks.</p>';
   }
 
-  async function callAPI(prompt) {
-    var r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 800, tools: [{ type: 'web_search_20250305', name: 'web_search' }], messages: [{ role: 'user', content: prompt }] })
-    });
-    var d = await r.json();
-    var txt = (d.content||[]).filter(function(c){return c.type==='text';}).map(function(c){return c.text;}).join('');
-    var m = txt.match(/[{][^{}]+[}]/s);
-    try { return m ? JSON.parse(m[0]) : null; } catch(e) { return null; }
-  }
-
-  async function agentFind(key, pi, bi) {
-    var ckey = ck(key,pi,bi);
-    if (!cache[ckey]) cache[ckey] = {};
-    var pt = parts(pdata[key][pi])[bi];
-    var pg = document.getElementById('prog-'+key+'-'+pi);
-    if (pg) pg.textContent = 'Zoeken: ' + pt + '...';
-    var res = await callAPI('Zoek de officiele website van Nederlandse organisatie "'+pt+'" (EFRO/JTF subsidie). Geef ALLEEN JSON: {"website":"https://...","linkedin":"url of null","twitter":"url of null","overig":"tekst of null"}');
-    if (res) {
-      if (res.website) cache[ckey].website = res.website;
-      if (res.linkedin && res.linkedin !== 'null') cache[ckey].linkedin = res.linkedin;
-      if (res.twitter && res.twitter !== 'null') cache[ckey].twitter = res.twitter;
-      if (res.overig && res.overig !== 'null') cache[ckey].overig = res.overig;
-    }
-    if (pg) pg.textContent = 'Klaar: ' + pt;
-    showTable(key);
-  }
-
-  async function agentFindAll(key, pi) {
-    var pts = parts(pdata[key][pi]);
-    var pg = document.getElementById('prog-'+key+'-'+pi);
-    for (var bi = 0; bi < pts.length; bi++) {
-      if (cache[ck(key,pi,bi)] && cache[ck(key,pi,bi)].website) continue;
-      if (pg) pg.textContent = (bi+1)+'/'+pts.length+': '+pts[bi];
-      await agentFind(key, pi, bi);
-      await new Promise(function(r){setTimeout(r,600);});
-    }
-    if (pg) pg.textContent = 'Klaar: ' + pts.length + ' partners';
-    showTable(key);
-  }
-
-  async function agentCheck(key, pi, bi) {
-    var ckey = ck(key,pi,bi);
-    if (!cache[ckey] || !cache[ckey].website) return;
-    var pt = parts(pdata[key][pi])[bi];
-    var ws = cache[ckey].website;
-    var pg = document.getElementById('prog-'+key+'-'+pi);
-    if (pg) pg.textContent = 'Check: ' + pt + '...';
-    var res = await callAPI('Controleer website "'+ws+'" van "'+pt+'" op VO.2021/1060 art.47-50. Check: 1) verwijzing naar EFRO of JTF project, 2) EU-vlag met Medegefinancierd door de Europese Unie, 3) woorden EFRO of JTF of Kansen voor West of Europa. Geef ALLEEN JSON: {"verwijzing":true/false,"eu_vlag":true/false,"efro":true/false,"artikel_url":"url of null","linkedin":"url of null","twitter":"url of null","overig":"tekst of null"}');
-    if (res) {
-      cache[ckey].verwijzing = res.verwijzing === true;
-      cache[ckey].eu_vlag = res.eu_vlag === true;
-      cache[ckey].efro = res.efro === true;
-      cache[ckey].artikel_url = (res.artikel_url && res.artikel_url !== 'null') ? res.artikel_url : null;
-      if (res.linkedin && res.linkedin !== 'null') cache[ckey].linkedin = res.linkedin;
-      if (res.twitter && res.twitter !== 'null') cache[ckey].twitter = res.twitter;
-      if (res.overig && res.overig !== 'null') cache[ckey].overig = res.overig;
-    }
-    if (pg) pg.textContent = 'Check klaar: ' + pt;
-    showTable(key);
-    updateDash();
-  }
-
-  async function agentCheckAll(key, pi) {
-    var pts = parts(pdata[key][pi]);
-    var pg = document.getElementById('prog-'+key+'-'+pi);
-    for (var bi = 0; bi < pts.length; bi++) {
-      var ckey = ck(key,pi,bi);
-      if (!cache[ckey] || !cache[ckey].website) continue;
-      if (pg) pg.textContent = (bi+1)+'/'+pts.length+' controleren...';
-      await agentCheck(key, pi, bi);
-      await new Promise(function(r){setTimeout(r,800);});
-    }
-    if (pg) pg.textContent = 'Alle checks klaar';
-    updateDash();
-  }
-
-  function updateDash() {
-    var totOk=0, totDeels=0, totNok=0;
-    var perKey = { kvw3:{ok:0,deels:0,nok:0}, ijmond:{ok:0,deels:0,nok:0}, rijnmond:{ok:0,deels:0,nok:0} };
-    Object.keys(cache).forEach(function(ckey) {
-      var c = cache[ckey];
-      if (c.verwijzing !== undefined || c.eu_vlag !== undefined || c.efro !== undefined) {
-        var key = ckey.split('_')[0];
-        var score = (c.verwijzing===true?1:0) + (c.eu_vlag===true?1:0) + (c.efro===true?1:0);
-        if (score === 3) { totOk++; if(perKey[key]) perKey[key].ok++; }
-        else if (score > 0) { totDeels++; if(perKey[key]) perKey[key].deels++; }
-        else { totNok++; if(perKey[key]) perKey[key].nok++; }
-      }
-    });
-    var dOk=document.getElementById('dOk'); if(dOk) dOk.textContent=totOk;
-    var dDeels=document.getElementById('dDeels'); if(dDeels) dDeels.textContent=totDeels;
-    var dNok=document.getElementById('dNok'); if(dNok) dNok.textContent=totNok;
-    ['kvw3','ijmond','rijnmond'].forEach(function(key) {
-      var pk = perKey[key];
-      ['ok','deels','nok'].forEach(function(t) {
-        var e1=document.getElementById('s-'+key+'-'+t); if(e1) e1.textContent=pk[t];
-        var e2=document.getElementById('ps-'+key+'-'+t); if(e2) e2.textContent=pk[t];
-      });
-    });
-  }
 })();
 </script>
 </body>
