@@ -6,6 +6,9 @@ function getPart(p) {
   return (p['Begunstigden'] || '').split('|').map(function(s) { return s.trim(); }).filter(Boolean);
 }
 
+// Zorg dat login scherm zichtbaar is
+document.getElementById('login-screen').style.display = 'flex';
+document.getElementById('main-app').style.display = 'none';
 document.getElementById('login-btn').addEventListener('click', checkPwd);
 document.getElementById('pwd-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') checkPwd();
