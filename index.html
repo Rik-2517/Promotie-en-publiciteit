@@ -259,7 +259,7 @@ a.ul:hover{text-decoration:underline;}
         </div>
         <div class="reg-item">
           <h4>Artikel 49 &mdash; Verplichtingen begunstigden bij &gt;100.000 euro</h4>
-          <p>Begunstigden van concrete acties waarbij de totale steun meer dan 100.000 euro bedraagt, dienen: (a) op hun officiële website, indien aanwezig, een korte beschrijving te plaatsen van de concrete actie, inclusief doelen en resultaten, en de financiële steun van de Unie te vermelden; (b) op sociale media een beschrijving te plaatsen van de concrete actie met de financiële steun van de Unie; (c) een vermelding te plaatsen die de financiële steun van de Unie duidelijk zichtbaar maakt, met het EU-logo en de verklaring &ldquo;Medegefinancierd door de Europese Unie&rdquo;.</p>
+          <p>Begunstigden van concrete acties waarbij de totale steun meer dan 100.000 euro bedraagt, dienen: (a) op hun officiÃ«le website, indien aanwezig, een korte beschrijving te plaatsen van de concrete actie, inclusief doelen en resultaten, en de financiÃ«le steun van de Unie te vermelden; (b) op sociale media een beschrijving te plaatsen van de concrete actie met de financiÃ«le steun van de Unie; (c) een vermelding te plaatsen die de financiÃ«le steun van de Unie duidelijk zichtbaar maakt, met het EU-logo en de verklaring &ldquo;Medegefinancierd door de Europese Unie&rdquo;.</p>
         </div>
         <div class="reg-item">
           <h4>Artikel 50 &mdash; EU-logo</h4>
@@ -279,7 +279,7 @@ a.ul:hover{text-decoration:underline;}
           <div class="check-icon">&#128279;</div>
           <div class="check-text">
             <h5>Check 1 &mdash; Verwijzing naar het project</h5>
-            <p>Staat er op de website een beschrijving van het EFRO- of JTF-project waarvoor de subsidie is ontvangen? Bevat die beschrijving het doel en de verwachte resultaten? Wordt de financiële steun van de EU expliciet vermeld? Groen = aanwezig en volledig. Oranje = gedeeltelijk. Rood = afwezig.</p>
+            <p>Staat er op de website een beschrijving van het EFRO- of JTF-project waarvoor de subsidie is ontvangen? Bevat die beschrijving het doel en de verwachte resultaten? Wordt de financiÃ«le steun van de EU expliciet vermeld? Groen = aanwezig en volledig. Oranje = gedeeltelijk. Rood = afwezig.</p>
           </div>
         </div>
         <div class="check-item">
@@ -320,7 +320,7 @@ a.ul:hover{text-decoration:underline;}
 
         <div style="margin-top:16px;padding:14px 18px;background:#e8f4fd;border-radius:8px;border-left:4px solid #0d6efd;">
           <p style="font-size:13px;color:#0d6efd;font-weight:bold;margin-bottom:6px">&#9432; Beoordeling compliance</p>
-          <p style="font-size:13px;color:#444;">Een project is <strong style="color:var(--green)">volledig compliant</strong> als checks 1, 2 én 3 allemaal groen zijn. Een project is <strong style="color:var(--orange)">deels compliant</strong> als minimaal één check groen is maar niet alle drie. Een project is <strong style="color:var(--red)">niet compliant</strong> als alle drie checks rood zijn of nog niet zijn uitgevoerd.</p>
+          <p style="font-size:13px;color:#444;">Een project is <strong style="color:var(--green)">volledig compliant</strong> als checks 1, 2 Ã©n 3 allemaal groen zijn. Een project is <strong style="color:var(--orange)">deels compliant</strong> als minimaal Ã©Ã©n check groen is maar niet alle drie. Een project is <strong style="color:var(--red)">niet compliant</strong> als alle drie checks rood zijn of nog niet zijn uitgevoerd.</p>
         </div>
       </div>
     </div>
@@ -419,7 +419,7 @@ function startApp(){
     pdata[key].forEach(function(p,i){
       var o=document.createElement('option');
       o.value=i;
-      o.textContent=(p['Projectnummer']||'')+' — '+(p['Projectnaam']||'');
+      o.textContent=(p['Projectnummer']||'')+' â '+(p['Projectnaam']||'');
       sel.appendChild(o);
     });
     sel.addEventListener('change',function(){showTable(key);});
@@ -526,15 +526,10 @@ function showTable(key){
     var twDot=socialDotMulti(c.twitter,'Twitter/X');
     var ovDot=c.overig&&c.overig!=='null'?'<span class="dot green"></span><div class="social-links"><span style="font-size:11px">'+c.overig+'</span></div>':'<span class="dot gray"></span>';
     var sc=(c.verwijzing===true?1:0)+(c.eu_vlag===true?1:0)+(c.efro===true?1:0);
-    var rowStyle=c.verwijzing!==null&&c.eu_vlag!==null&&c.efro!==null?
-      (sc===3?'background:#f0fff4;':'(sc>0?'background:#fffbf0;':'background:#fff5f5;')':'';
+
     // fix syntax
     var bg='';
-    if(c.verwijzing!==null||c.eu_vlag!==null||c.efro!==null){
-      if(sc===3)bg='style="background:#f0fff4"';
-      else if(sc>0)bg='style="background:#fffbf0"';
-      else bg='style="background:#fff5f5"';
-    }
+    if(c.verwijzing!==null||c.eu_vlag!==null||c.efro!==null){if(sc===3){bg='style="background:#f0fff4"';}else if(sc>0){bg='style="background:#fffbf0"';}else{bg='style="background:#fff5f5"';}}
     return '<tr '+bg+'><td><strong>'+pt+'</strong><br><span style="font-size:11px;color:#888">'+(adrs[bi]||'')+'</span></td>'
       +'<td>'+wsd+'</td>'
       +'<td style="text-align:center">'+dot(c.verwijzing)+'</td>'
