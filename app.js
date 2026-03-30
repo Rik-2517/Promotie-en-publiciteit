@@ -6,7 +6,6 @@ function getPart(p) {
   return (p['Begunstigden'] || '').split('|').map(function(s) { return s.trim(); }).filter(Boolean);
 }
 
-// LOGIN
 document.getElementById('login-btn').addEventListener('click', checkPwd);
 document.getElementById('pwd-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') checkPwd();
@@ -22,7 +21,6 @@ function checkPwd() {
   }
 }
 
-// TABS
 ['dashboard','kvw3','ijmond','rijnmond'].forEach(function(name) {
   var btn = document.getElementById('tab-btn-' + name);
   if (btn) btn.addEventListener('click', function() {
@@ -34,9 +32,8 @@ function checkPwd() {
 });
 
 function initApp() {
-  // Gebruik ingebakken data uit data.js
   if (!window.KVW3DATA || !window.IJMONDDATA || !window.RIJNMONDDATA) {
-    document.getElementById('header-status').innerHTML = '<span class="status-dot orange"></span>Data niet beschikbaar - herlaad de pagina';
+    document.getElementById('header-status').innerHTML = '<span class="status-dot orange"></span>Data niet beschikbaar';
     return;
   }
   projectData.kvw3 = window.KVW3DATA;
@@ -55,63 +52,80 @@ function initApp() {
   document.getElementById('ds-ijmond-partners').textContent = projectData.ijmond.reduce(function(s,p) { return s + getPart(p).length; }, 0);
   document.getElementById('ds-rijnmond-partners').textContent = projectData.rijnmond.reduce(function(s,p) { return s + getPart(p).length; }, 0);
   document.getElementById('header-status').innerHTML = '<span class="status-dot green"></span>' + tot + ' projecten geladen';
-  // Activeer Rijnmond tab standaard
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
-  var rBtn = document.getElementById('tab-btn-rijnmond'); if(rBtn) rBtn.classList.add('active');
-  var rTab = document.getElementById('tab-rijnmond'); if(rTab) rTab.classList.add('active');
 
+  // Rijnmond eerst, dan rest
   ['rijnmond','kvw3','ijmond'].forEach(function(key) {
     var sel = document.getElementById(key + '-select');
     projectData[key].forEach(function(p, i) {
       var o = document.createElement('option');
       o.value = i;
-      o.textContent = (p['Projectnummer'] || '') + ' ÃÂ¢ÃÂÃÂ ' + (p['Projectnaam'] || '');
+      o.textContent = (p['Projectnummer'] || '') + ' — ' + (p['Projectnaam'] || '');
       sel.appendChild(o);
     });
     sel.addEventListener('change', function() { showProjectTable(key); });
     document.getElementById(key + '-loading').style.display = 'none';
     document.getElementById(key + '-main').style.display = 'block';
-    // Toon initiele summary tabel
-    var summArea = document.getElementById(key + '-project-area');
-    if (summArea) summArea.innerHTML = buildSummaryTable(key);
+    // Toon volledige projecttabel direct
+    renderFullTable(key);
   });
+
+  // Activeer Rijnmond standaard
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
+  var rBtn = document.getElementById('tab-btn-rijnmond'); if(rBtn) rBtn.classList.add('active');
+  var rTab = document.getElementById('tab-rijnmond'); if(rTab) rTab.classList.add('active');
 }
 
-
-function buildSummaryTable(key) {
-  var data = projectData[key];
-  var totalProjects = data.length;
-  var totalPartners = data.reduce(function(s, p) { return s + getPart(p).length; }, 0);
-  var checked = 0, compliant = 0, nonCompliant = 0;
-  data.forEach(function(p, pi) {
-    getPart(p).forEach(function(pt, bi) {
-      var c = ppCache[ck(key, pi, bi)] || {};
-      if (c.verwijzing !== undefined) {
-        checked++;
-        (c.verwijzing && c.eu_vlag && c.efro) ? compliant++ : nonCompliant++;
-      }
-    });
-  });
-  var pct = checked > 0 ? Math.round(compliant / checked * 100) : 0;
-  return '<div class="summary-table">'
-    + '<table><thead><tr>'
-    + '<th>Totaal projecten</th><th>Totaal partners</th><th>Gecontroleerd</th><th>Compliant</th><th>Niet compliant</th><th>Compliance %</th>'
-    + '</tr></thead><tbody><tr>'
-    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--eu-blue)">' + totalProjects + '</td>'
-    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--eu-blue)">' + totalPartners + '</td>'
-    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:#555">' + checked + '</td>'
-    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--green)">' + compliant + '</td>'
-    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--red)">' + nonCompliant + '</td>'
-    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--eu-blue)">' + pct + '%</td>'
-    + '</tr></tbody></table></div>';
-}
 function ck(k, pi, bi) { return k + '_' + pi + '_' + bi; }
 
 function dot(v) {
   if (v === true) return '<span class="dot green"></span>';
   if (v === false) return '<span class="dot red"></span>';
   return '<span class="dot gray"></span>';
+}
+
+// Toon volledige projectoverzichtstabel boven de dropdown
+function renderFullTable(key) {
+  var area = document.getElementById(key + '-full-table');
+  if (!area) return;
+  // Bepaal label voor EFRO/JTF kolom
+  var efroLabel = (key === 'kvw3') ? 'EFRO/KvW/Europa' : 'JTF/KvW/Europa';
+
+  var rows = projectData[key].map(function(p, pi) {
+    var parts = getPart(p);
+    var partnerCount = parts.length;
+    var compliant = 0;
+    parts.forEach(function(pt, bi) {
+      var c = ppCache[ck(key, pi, bi)] || {};
+      if (c.verwijzing && c.eu_vlag && c.efro) compliant++;
+    });
+    var status = partnerCount === 0 ? dot(null) : (compliant === partnerCount && partnerCount > 0 ? dot(true) : (compliant > 0 ? '<span class="dot" style="background:#fd7e14"></span>' : dot(false)));
+    return '<tr style="cursor:pointer" onclick="jumpToProject('' + key + '',' + pi + ')">'
+      + '<td>' + (p['Projectnummer'] || '') + '</td>'
+      + '<td>' + (p['Projectnaam'] || '') + '</td>'
+      + '<td>' + (p['Penvoerder naam'] || '') + '</td>'
+      + '<td>' + (p['Penvoerder stad'] || '') + '</td>'
+      + '<td>' + partnerCount + '</td>'
+      + '<td style="text-align:center">' + status + '</td>'
+      + '</tr>';
+  }).join('');
+
+  area.innerHTML = '<h3 style="color:var(--eu-blue);font-size:15px;margin-bottom:12px">Alle projecten (' + projectData[key].length + ')</h3>'
+    + '<p style="font-size:12px;color:#888;margin-bottom:12px">Klik op een rij om het project te selecteren en de partnerdetails te bekijken.</p>'
+    + '<div class="table-wrap"><table>'
+    + '<thead><tr><th>Projectnummer</th><th>Projectnaam</th><th>Penvoerder</th><th>Stad</th><th>Partners</th><th>P&amp;P Status</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody>'
+    + '</table></div>';
+}
+
+// Spring naar project via klik in overzichtstabel
+function jumpToProject(key, pi) {
+  var sel = document.getElementById(key + '-select');
+  sel.value = pi;
+  showProjectTable(key);
+  // Scroll naar het detailgedeelte
+  var area = document.getElementById(key + '-project-area');
+  if (area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function showProjectTable(key) {
@@ -121,6 +135,9 @@ function showProjectTable(key) {
   var p = projectData[key][parseInt(idx)];
   var parts = getPart(p);
   var adrs = (p['Adresgegevens begunstigden'] || '').split('|').map(function(s) { return s.trim(); });
+
+  // Label voor EFRO/JTF kolom afhankelijk van programma
+  var efroLabel = (key === 'kvw3') ? 'EFRO/KvW/Europa artikel' : 'JTF/KvW/Europa artikel';
 
   var rows = parts.map(function(pt, bi) {
     var c = ppCache[ck(key, idx, bi)] || {};
@@ -132,19 +149,27 @@ function showProjectTable(key) {
     var od = c.overig ? '<span style="font-size:11px">' + c.overig + '</span>' : '<em style="color:#aaa;font-size:11px">&mdash;</em>';
     var chk = ws ? '<button class="agent-btn green" style="padding:5px 10px;font-size:11px" data-key="' + key + '" data-pi="' + idx + '" data-bi="' + bi + '" data-action="check">&#10003; Check</button>' : '<em style="color:#aaa;font-size:11px">Eerst website</em>';
     var fnd = !ws ? '<br><button class="agent-btn blue" style="padding:5px 10px;font-size:11px;margin-top:4px" data-key="' + key + '" data-pi="' + idx + '" data-bi="' + bi + '" data-action="find">&#128269; Zoek</button>' : '';
-    return '<tr><td><strong>' + pt + '</strong><br><span style="font-size:11px;color:#888">' + (adrs[bi] || '') + '</span></td><td>' + wsd + fnd + '</td><td style="text-align:center">' + dot(c.verwijzing) + '</td><td style="text-align:center">' + dot(c.eu_vlag) + '</td><td style="text-align:center">' + dot(c.efro) + ad + '</td><td>' + ld + '</td><td>' + td + '</td><td>' + od + '</td><td>' + chk + '</td></tr>';
+    return '<tr><td><strong>' + pt + '</strong><br><span style="font-size:11px;color:#888">' + (adrs[bi] || '') + '</span></td>'
+      + '<td>' + wsd + fnd + '</td>'
+      + '<td style="text-align:center">' + dot(c.verwijzing) + '</td>'
+      + '<td style="text-align:center">' + dot(c.eu_vlag) + '</td>'
+      + '<td style="text-align:center">' + dot(c.efro) + ad + '</td>'
+      + '<td>' + ld + '</td>'
+      + '<td>' + td + '</td>'
+      + '<td>' + od + '</td>'
+      + '<td>' + chk + '</td></tr>';
   }).join('');
 
-  area.innerHTML = buildSummaryTable(key) + '<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:6px">' + (p['Projectnaam'] || '') + '</h3>'
+  area.innerHTML = '<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:6px">' + (p['Projectnaam'] || '') + '</h3>'
     + '<p style="font-size:13px;color:#666;margin-bottom:16px">Nr: ' + (p['Projectnummer'] || '') + ' &nbsp;|&nbsp; Penvoerder: ' + (p['Penvoerder naam'] || '') + ' &nbsp;|&nbsp; ' + (p['Penvoerder stad'] || '') + '</p>'
     + '<div class="agent-bar">'
     + '<button class="agent-btn blue" data-key="' + key + '" data-pi="' + idx + '" data-action="findall">&#128269; Zoek alle websites (Agent 2)</button>'
     + '<button class="agent-btn green" data-key="' + key + '" data-pi="' + idx + '" data-action="checkall">&#10003; Check alle compliance (Agent 3)</button>'
     + '<span class="agent-progress" id="ap-' + key + '-' + idx + '"></span>'
     + '</div>'
-    + '<div class="table-wrap"><table><thead><tr>'
-    + '<th>Projectpartner</th><th>Website</th><th>Verwijzing project</th><th>EU-vlag + vermelding</th><th>EFRO/KvW/Europa</th><th>LinkedIn</th><th>Twitter/X</th><th>Overige media</th><th>Actie</th>'
-    + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
+    + '<div class="table-wrap"><table>'
+    + '<thead><tr><th>Projectpartner</th><th>Website</th><th>Verwijzing project</th><th>EU-vlag + vermelding</th><th>' + efroLabel + '</th><th>LinkedIn</th><th>Twitter/X</th><th>Overige media</th><th>Actie</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table></div>'
     + '<p style="font-size:11px;color:#888;margin-top:10px">VO.2021/1060 Art.47-50: Begunstigden tonen EU-vlag met "Medegefinancierd door de Europese Unie" en verwijzen naar het project.</p>';
 
   area.querySelectorAll('[data-action]').forEach(function(btn) {
@@ -156,6 +181,9 @@ function showProjectTable(key) {
       else if (action === 'checkall') runCheckAll(k, pi);
     });
   });
+
+  // Ververs ook de overzichtstabel
+  renderFullTable(key);
 }
 
 async function callAgent(prompt) {
@@ -210,7 +238,7 @@ async function runCheck(key, pi, bi) {
   var pg = document.getElementById('ap-' + key + '-' + pi);
   if (pg) pg.textContent = 'Compliance check: ' + pt + '...';
   try {
-    var res = await callAgent('Controleer website "' + ws + '" van "' + pt + '" op VO.2021/1060 art.47-50. 1)Verwijzing naar EFRO/JTF project op website. 2)EU-vlag + tekst Medegefinancierd door de Europese Unie. 3)Woorden EFRO/Kansen voor West/Europa/JTF op site. Geef ALLEEN JSON: {"verwijzing":true/false,"eu_vlag":true/false,"efro":true/false,"artikel_url":"URL of null","linkedin":"URL of null","twitter":"URL of null","overig":"tekst of null"}. Geen andere tekst.');
+    var res = await callAgent('Controleer website "' + ws + '" van "' + pt + '" op VO.2021/1060 art.47-50. 1)Verwijzing naar EFRO/JTF project op website. 2)EU-vlag + tekst Medegefinancierd door de Europese Unie. 3)Woorden EFRO/JTF/Kansen voor West/Europa op site. Geef ALLEEN JSON: {"verwijzing":true/false,"eu_vlag":true/false,"efro":true/false,"artikel_url":"URL of null","linkedin":"URL of null","twitter":"URL of null","overig":"tekst of null"}. Geen andere tekst.');
     if (res) {
       ppCache[ckey].verwijzing = res.verwijzing === true;
       ppCache[ckey].eu_vlag = res.eu_vlag === true;
@@ -248,5 +276,3 @@ function updateDb() {
   document.getElementById('d-compliant').textContent = c;
   document.getElementById('d-non-compliant').textContent = nc;
 }
-// Voeg summary-table CSS toe
-(function(){ var s=document.createElement('style'); s.textContent='.summary-table { margin-bottom: 24px; border-radius: 10px; overflow: hidden; border: 2px solid var(--eu-blue); }.summary-table table { min-width: unset; }.summary-table th { background: var(--eu-blue); color: white; text-align: center; font-size: 12px; padding: 10px 16px; }.summary-table td { background: var(--light-blue); border-bottom: none; }'; document.head.appendChild(s); })();
