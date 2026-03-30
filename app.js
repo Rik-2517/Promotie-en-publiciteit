@@ -1,18 +1,9 @@
-// Promotie & Publiciteit Monitor - app.js
-const projectData = { kvw3: [], ijmond: [], rijnmond: [] };
-const ppCache = {};
+var projectData = { kvw3: [], ijmond: [], rijnmond: [] };
+var ppCache = {};
 
 function getPart(p) {
   return (p['Begunstigden'] || '').split('|').map(function(s) { return s.trim(); }).filter(Boolean);
 }
-
-// Zorg dat login scherm zichtbaar is
-document.getElementById('login-screen').style.display = 'flex';
-document.getElementById('main-app').style.display = 'none';
-document.getElementById('login-btn').addEventListener('click', checkPwd);
-document.getElementById('pwd-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') checkPwd();
-});
 
 function checkPwd() {
   if (document.getElementById('pwd-input').value === 'PromotieENPubliciteit') {
@@ -23,6 +14,11 @@ function checkPwd() {
     document.getElementById('login-error').style.display = 'block';
   }
 }
+
+document.getElementById('login-btn').addEventListener('click', checkPwd);
+document.getElementById('pwd-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkPwd();
+});
 
 ['dashboard','kvw3','ijmond','rijnmond'].forEach(function(name) {
   var btn = document.getElementById('tab-btn-' + name);
@@ -56,7 +52,6 @@ function initApp() {
   document.getElementById('ds-rijnmond-partners').textContent = projectData.rijnmond.reduce(function(s,p) { return s + getPart(p).length; }, 0);
   document.getElementById('header-status').innerHTML = '<span class="status-dot green"></span>' + tot + ' projecten geladen';
 
-  // Rijnmond eerst, dan rest
   ['rijnmond','kvw3','ijmond'].forEach(function(key) {
     var sel = document.getElementById(key + '-select');
     projectData[key].forEach(function(p, i) {
@@ -68,15 +63,14 @@ function initApp() {
     sel.addEventListener('change', function() { showProjectTable(key); });
     document.getElementById(key + '-loading').style.display = 'none';
     document.getElementById(key + '-main').style.display = 'block';
-    // Toon volledige projecttabel direct
-    renderFullTable(key);
   });
 
-  // Activeer Rijnmond standaard
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});
-  var rBtn = document.getElementById('tab-btn-rijnmond'); if(rBtn) rBtn.classList.add('active');
-  var rTab = document.getElementById('tab-rijnmond'); if(rTab) rTab.classList.add('active');
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+  var rBtn = document.getElementById('tab-btn-rijnmond');
+  if (rBtn) rBtn.classList.add('active');
+  var rTab = document.getElementById('tab-rijnmond');
+  if (rTab) rTab.classList.add('active');
 }
 
 function ck(k, pi, bi) { return k + '_' + pi + '_' + bi; }
@@ -87,50 +81,6 @@ function dot(v) {
   return '<span class="dot gray"></span>';
 }
 
-// Toon volledige projectoverzichtstabel boven de dropdown
-function renderFullTable(key) {
-  var area = document.getElementById(key + '-full-table');
-  if (!area) return;
-  // Bepaal label voor EFRO/JTF kolom
-  var efroLabel = (key === 'kvw3') ? 'EFRO/KvW/Europa' : 'JTF/KvW/Europa';
-
-  var rows = projectData[key].map(function(p, pi) {
-    var parts = getPart(p);
-    var partnerCount = parts.length;
-    var compliant = 0;
-    parts.forEach(function(pt, bi) {
-      var c = ppCache[ck(key, pi, bi)] || {};
-      if (c.verwijzing && c.eu_vlag && c.efro) compliant++;
-    });
-    var status = partnerCount === 0 ? dot(null) : (compliant === partnerCount && partnerCount > 0 ? dot(true) : (compliant > 0 ? '<span class="dot" style="background:#fd7e14"></span>' : dot(false)));
-    return '<tr style="cursor:pointer" onclick="jumpToProject('' + key + '',' + pi + ')">'
-      + '<td>' + (p['Projectnummer'] || '') + '</td>'
-      + '<td>' + (p['Projectnaam'] || '') + '</td>'
-      + '<td>' + (p['Penvoerder naam'] || '') + '</td>'
-      + '<td>' + (p['Penvoerder stad'] || '') + '</td>'
-      + '<td>' + partnerCount + '</td>'
-      + '<td style="text-align:center">' + status + '</td>'
-      + '</tr>';
-  }).join('');
-
-  area.innerHTML = '<h3 style="color:var(--eu-blue);font-size:15px;margin-bottom:12px">Alle projecten (' + projectData[key].length + ')</h3>'
-    + '<p style="font-size:12px;color:#888;margin-bottom:12px">Klik op een rij om het project te selecteren en de partnerdetails te bekijken.</p>'
-    + '<div class="table-wrap"><table>'
-    + '<thead><tr><th>Projectnummer</th><th>Projectnaam</th><th>Penvoerder</th><th>Stad</th><th>Partners</th><th>P&amp;P Status</th></tr></thead>'
-    + '<tbody>' + rows + '</tbody>'
-    + '</table></div>';
-}
-
-// Spring naar project via klik in overzichtstabel
-function jumpToProject(key, pi) {
-  var sel = document.getElementById(key + '-select');
-  sel.value = pi;
-  showProjectTable(key);
-  // Scroll naar het detailgedeelte
-  var area = document.getElementById(key + '-project-area');
-  if (area) area.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
 function showProjectTable(key) {
   var idx = document.getElementById(key + '-select').value;
   var area = document.getElementById(key + '-project-area');
@@ -139,54 +89,36 @@ function showProjectTable(key) {
   var parts = getPart(p);
   var adrs = (p['Adresgegevens begunstigden'] || '').split('|').map(function(s) { return s.trim(); });
 
-  // Label voor EFRO/JTF kolom afhankelijk van programma
-  var efroLabel = (key === 'kvw3') ? 'EFRO/KvW/Europa artikel' : 'JTF/KvW/Europa artikel';
-
   var rows = parts.map(function(pt, bi) {
     var c = ppCache[ck(key, idx, bi)] || {};
     var ws = c.website || '';
     var wsd = ws ? '<a href="' + ws + '" target="_blank" class="url-link">' + ws + '</a>' : '<em style="color:#aaa;font-size:11px">Niet gevonden</em>';
-    var ad = c.artikel_url ? '<br><a href="' + c.artikel_url + '" target="_blank" class="url-link" style="font-size:11px">&#128196; Artikel</a>' : '';
-    var ld = c.linkedin ? '<a href="' + c.linkedin + '" target="_blank" class="url-link">LinkedIn</a>' : '<em style="color:#aaa;font-size:11px">&mdash;</em>';
-    var td = c.twitter ? '<a href="' + c.twitter + '" target="_blank" class="url-link">Twitter/X</a>' : '<em style="color:#aaa;font-size:11px">&mdash;</em>';
-    var od = c.overig ? '<span style="font-size:11px">' + c.overig + '</span>' : '<em style="color:#aaa;font-size:11px">&mdash;</em>';
-    var chk = ws ? '<button class="agent-btn green" style="padding:5px 10px;font-size:11px" data-key="' + key + '" data-pi="' + idx + '" data-bi="' + bi + '" data-action="check">&#10003; Check</button>' : '<em style="color:#aaa;font-size:11px">Eerst website</em>';
-    var fnd = !ws ? '<br><button class="agent-btn blue" style="padding:5px 10px;font-size:11px;margin-top:4px" data-key="' + key + '" data-pi="' + idx + '" data-bi="' + bi + '" data-action="find">&#128269; Zoek</button>' : '';
-    return '<tr><td><strong>' + pt + '</strong><br><span style="font-size:11px;color:#888">' + (adrs[bi] || '') + '</span></td>'
-      + '<td>' + wsd + fnd + '</td>'
-      + '<td style="text-align:center">' + dot(c.verwijzing) + '</td>'
-      + '<td style="text-align:center">' + dot(c.eu_vlag) + '</td>'
-      + '<td style="text-align:center">' + dot(c.efro) + ad + '</td>'
-      + '<td>' + ld + '</td>'
-      + '<td>' + td + '</td>'
-      + '<td>' + od + '</td>'
-      + '<td>' + chk + '</td></tr>';
+    var ad = c.artikel_url ? '<br><a href="' + c.artikel_url + '" target="_blank" class="url-link" style="font-size:11px">Artikel</a>' : '';
+    var ld = c.linkedin ? '<a href="' + c.linkedin + '" target="_blank" class="url-link">LinkedIn</a>' : '<em style="color:#aaa;font-size:11px">—</em>';
+    var td = c.twitter ? '<a href="' + c.twitter + '" target="_blank" class="url-link">Twitter/X</a>' : '<em style="color:#aaa;font-size:11px">—</em>';
+    var od = c.overig ? '<span style="font-size:11px">' + c.overig + '</span>' : '<em style="color:#aaa;font-size:11px">—</em>';
+    var chk = ws ? '<button class="agent-btn green" style="padding:5px 10px;font-size:11px" data-key="' + key + '" data-pi="' + idx + '" data-bi="' + bi + '" data-action="check">✓ Check</button>' : '<em style="color:#aaa;font-size:11px">Eerst website</em>';
+    var fnd = !ws ? '<br><button class="agent-btn blue" style="padding:5px 10px;font-size:11px;margin-top:4px" data-key="' + key + '" data-pi="' + idx + '" data-bi="' + bi + '" data-action="find">Zoek</button>' : '';
+    return '<tr><td><strong>' + pt + '</strong><br><span style="font-size:11px;color:#888">' + (adrs[bi]||'') + '</span></td><td>' + wsd + fnd + '</td><td style="text-align:center">' + dot(c.verwijzing) + '</td><td style="text-align:center">' + dot(c.eu_vlag) + '</td><td style="text-align:center">' + dot(c.efro) + ad + '</td><td>' + ld + '</td><td>' + td + '</td><td>' + od + '</td><td>' + chk + '</td></tr>';
   }).join('');
 
-  area.innerHTML = '<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:6px">' + (p['Projectnaam'] || '') + '</h3>'
-    + '<p style="font-size:13px;color:#666;margin-bottom:16px">Nr: ' + (p['Projectnummer'] || '') + ' &nbsp;|&nbsp; Penvoerder: ' + (p['Penvoerder naam'] || '') + ' &nbsp;|&nbsp; ' + (p['Penvoerder stad'] || '') + '</p>'
-    + '<div class="agent-bar">'
-    + '<button class="agent-btn blue" data-key="' + key + '" data-pi="' + idx + '" data-action="findall">&#128269; Zoek alle websites (Agent 2)</button>'
-    + '<button class="agent-btn green" data-key="' + key + '" data-pi="' + idx + '" data-action="checkall">&#10003; Check alle compliance (Agent 3)</button>'
-    + '<span class="agent-progress" id="ap-' + key + '-' + idx + '"></span>'
-    + '</div>'
-    + '<div class="table-wrap"><table>'
-    + '<thead><tr><th>Projectpartner</th><th>Website</th><th>Verwijzing project</th><th>EU-vlag + vermelding</th><th>' + efroLabel + '</th><th>LinkedIn</th><th>Twitter/X</th><th>Overige media</th><th>Actie</th></tr></thead>'
-    + '<tbody>' + rows + '</tbody></table></div>'
-    + '<p style="font-size:11px;color:#888;margin-top:10px">VO.2021/1060 Art.47-50: Begunstigden tonen EU-vlag met "Medegefinancierd door de Europese Unie" en verwijzen naar het project.</p>';
+  area.innerHTML = '<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:6px">' + (p['Projectnaam']||'') + '</h3>'
+    + '<p style="font-size:13px;color:#666;margin-bottom:16px">Nr: ' + (p['Projectnummer']||'') + ' | Penvoerder: ' + (p['Penvoerder naam']||'') + ' | ' + (p['Penvoerder stad']||'') + '</p>'
+    + '<div class="agent-bar"><button class="agent-btn blue" data-key="' + key + '" data-pi="' + idx + '" data-action="findall">Zoek alle websites (Agent 2)</button>'
+    + '<button class="agent-btn green" data-key="' + key + '" data-pi="' + idx + '" data-action="checkall">Check alle compliance (Agent 3)</button>'
+    + '<span class="agent-progress" id="ap-' + key + '-' + idx + '"></span></div>'
+    + '<div class="table-wrap"><table><thead><tr><th>Projectpartner</th><th>Website</th><th>Verwijzing project</th><th>EU-vlag + vermelding</th><th>EFRO/JTF/Europa artikel</th><th>LinkedIn</th><th>Twitter/X</th><th>Overige media</th><th>Actie</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+    + '<p style="font-size:11px;color:#888;margin-top:10px">VO.2021/1060 Art.47-50</p>';
 
   area.querySelectorAll('[data-action]').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      var k = this.dataset.key, pi = parseInt(this.dataset.pi), bi = this.dataset.bi !== undefined ? parseInt(this.dataset.bi) : null, action = this.dataset.action;
-      if (action === 'find') runFind(k, pi, bi);
-      else if (action === 'check') runCheck(k, pi, bi);
-      else if (action === 'findall') runFindAll(k, pi);
-      else if (action === 'checkall') runCheckAll(k, pi);
+      var k=this.dataset.key, pi=parseInt(this.dataset.pi), bi=this.dataset.bi!==undefined?parseInt(this.dataset.bi):null, action=this.dataset.action;
+      if(action==='find') runFind(k,pi,bi);
+      else if(action==='check') runCheck(k,pi,bi);
+      else if(action==='findall') runFindAll(k,pi);
+      else if(action==='checkall') runCheckAll(k,pi);
     });
   });
-
-  // Ververs ook de overzichtstabel
-  renderFullTable(key);
 }
 
 async function callAgent(prompt) {
@@ -196,86 +128,84 @@ async function callAgent(prompt) {
     body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, tools: [{ type: 'web_search_20250305', name: 'web_search' }], messages: [{ role: 'user', content: prompt }] })
   });
   var d = await r.json();
-  var txt = (d.content || []).filter(function(c) { return c.type === 'text'; }).map(function(c) { return c.text; }).join('');
-  var m = txt.match(/\{[\s\S]*?\}/);
+  var txt = (d.content||[]).filter(function(c){return c.type==='text';}).map(function(c){return c.text;}).join('');
+  var m = txt.match(/[{][^{}]*[}]/);
   try { return m ? JSON.parse(m[0]) : null; } catch(e) { return null; }
 }
 
 async function runFind(key, pi, bi) {
-  var ckey = ck(key, pi, bi);
-  if (!ppCache[ckey]) ppCache[ckey] = {};
-  var pt = getPart(projectData[key][pi])[bi];
-  var pg = document.getElementById('ap-' + key + '-' + pi);
-  if (pg) pg.textContent = 'Zoeken: ' + pt + '...';
+  var ckey=ck(key,pi,bi); if(!ppCache[ckey]) ppCache[ckey]={};
+  var pt=getPart(projectData[key][pi])[bi];
+  var pg=document.getElementById('ap-'+key+'-'+pi);
+  if(pg) pg.textContent='Zoeken: '+pt+'...';
   try {
-    var res = await callAgent('Zoek de officiele website van de Nederlandse organisatie "' + pt + '" betrokken bij EFRO/JTF subsidie. Geef ALLEEN JSON: {"website":"https://...","linkedin":"URL of null","twitter":"URL of null","overig":"tekst of null"}. Geen andere tekst.');
-    if (res) {
-      if (res.website) ppCache[ckey].website = res.website;
-      if (res.linkedin && res.linkedin !== 'null') ppCache[ckey].linkedin = res.linkedin;
-      if (res.twitter && res.twitter !== 'null') ppCache[ckey].twitter = res.twitter;
-      if (res.overig && res.overig !== 'null') ppCache[ckey].overig = res.overig;
+    var res=await callAgent('Zoek de officiele website van de Nederlandse organisatie "'+pt+'" betrokken bij EFRO of JTF subsidie. Geef ALLEEN JSON met velden website, linkedin, twitter, overig. Gebruik null als niet gevonden.');
+    if(res) {
+      if(res.website) ppCache[ckey].website=res.website;
+      if(res.linkedin&&res.linkedin!=='null') ppCache[ckey].linkedin=res.linkedin;
+      if(res.twitter&&res.twitter!=='null') ppCache[ckey].twitter=res.twitter;
+      if(res.overig&&res.overig!=='null') ppCache[ckey].overig=res.overig;
     }
-    if (pg) pg.textContent = 'Gevonden: ' + pt;
+    if(pg) pg.textContent='Gevonden: '+pt;
     showProjectTable(key);
-  } catch(e) { if (pg) pg.textContent = 'Fout: ' + pt; }
+  } catch(e) { if(pg) pg.textContent='Fout: '+pt; }
 }
 
 async function runFindAll(key, pi) {
-  var pts = getPart(projectData[key][pi]);
-  var pg = document.getElementById('ap-' + key + '-' + pi);
-  for (var bi = 0; bi < pts.length; bi++) {
-    if (ppCache[ck(key, pi, bi)] && ppCache[ck(key, pi, bi)].website) continue;
-    if (pg) pg.textContent = (bi + 1) + '/' + pts.length + ': ' + pts[bi];
-    await runFind(key, pi, bi);
-    await new Promise(function(r) { setTimeout(r, 600); });
+  var pts=getPart(projectData[key][pi]);
+  var pg=document.getElementById('ap-'+key+'-'+pi);
+  for(var bi=0;bi<pts.length;bi++) {
+    if(ppCache[ck(key,pi,bi)]&&ppCache[ck(key,pi,bi)].website) continue;
+    if(pg) pg.textContent=(bi+1)+'/'+pts.length+': '+pts[bi];
+    await runFind(key,pi,bi);
+    await new Promise(function(r){setTimeout(r,600);});
   }
-  if (pg) pg.textContent = 'Klaar: ' + pts.length + ' partners doorzocht';
+  if(pg) pg.textContent='Klaar: '+pts.length+' partners doorzocht';
   showProjectTable(key);
 }
 
 async function runCheck(key, pi, bi) {
-  var ckey = ck(key, pi, bi);
-  if (!ppCache[ckey] || !ppCache[ckey].website) return;
-  var pt = getPart(projectData[key][pi])[bi];
-  var ws = ppCache[ckey].website;
-  var pg = document.getElementById('ap-' + key + '-' + pi);
-  if (pg) pg.textContent = 'Compliance check: ' + pt + '...';
+  var ckey=ck(key,pi,bi);
+  if(!ppCache[ckey]||!ppCache[ckey].website) return;
+  var pt=getPart(projectData[key][pi])[bi];
+  var ws=ppCache[ckey].website;
+  var pg=document.getElementById('ap-'+key+'-'+pi);
+  if(pg) pg.textContent='Compliance check: '+pt+'...';
   try {
-    var res = await callAgent('Controleer website "' + ws + '" van "' + pt + '" op VO.2021/1060 art.47-50. 1)Verwijzing naar EFRO/JTF project op website. 2)EU-vlag + tekst Medegefinancierd door de Europese Unie. 3)Woorden EFRO/JTF/Kansen voor West/Europa op site. Geef ALLEEN JSON: {"verwijzing":true/false,"eu_vlag":true/false,"efro":true/false,"artikel_url":"URL of null","linkedin":"URL of null","twitter":"URL of null","overig":"tekst of null"}. Geen andere tekst.');
-    if (res) {
-      ppCache[ckey].verwijzing = res.verwijzing === true;
-      ppCache[ckey].eu_vlag = res.eu_vlag === true;
-      ppCache[ckey].efro = res.efro === true;
-      ppCache[ckey].artikel_url = res.artikel_url && res.artikel_url !== 'null' ? res.artikel_url : null;
-      if (res.linkedin && res.linkedin !== 'null') ppCache[ckey].linkedin = res.linkedin;
-      if (res.twitter && res.twitter !== 'null') ppCache[ckey].twitter = res.twitter;
-      if (res.overig && res.overig !== 'null') ppCache[ckey].overig = res.overig;
+    var res=await callAgent('Controleer website "'+ws+'" van "'+pt+'" op VO.2021/1060 art.47-50. Check: 1) verwijzing naar EFRO of JTF project, 2) EU-vlag met tekst Medegefinancierd door de Europese Unie, 3) woorden EFRO of JTF of Kansen voor West of Europa. Geef ALLEEN JSON met velden verwijzing (true/false), eu_vlag (true/false), efro (true/false), artikel_url, linkedin, twitter, overig.');
+    if(res) {
+      ppCache[ckey].verwijzing=res.verwijzing===true;
+      ppCache[ckey].eu_vlag=res.eu_vlag===true;
+      ppCache[ckey].efro=res.efro===true;
+      ppCache[ckey].artikel_url=res.artikel_url&&res.artikel_url!=='null'?res.artikel_url:null;
+      if(res.linkedin&&res.linkedin!=='null') ppCache[ckey].linkedin=res.linkedin;
+      if(res.twitter&&res.twitter!=='null') ppCache[ckey].twitter=res.twitter;
+      if(res.overig&&res.overig!=='null') ppCache[ckey].overig=res.overig;
     }
-    if (pg) pg.textContent = 'Check klaar: ' + pt;
-    showProjectTable(key);
-    updateDb();
-  } catch(e) { if (pg) pg.textContent = 'Fout: ' + pt; }
+    if(pg) pg.textContent='Check klaar: '+pt;
+    showProjectTable(key); updateDb();
+  } catch(e) { if(pg) pg.textContent='Fout: '+pt; }
 }
 
 async function runCheckAll(key, pi) {
-  var pts = getPart(projectData[key][pi]);
-  var pg = document.getElementById('ap-' + key + '-' + pi);
-  for (var bi = 0; bi < pts.length; bi++) {
-    var ckey = ck(key, pi, bi);
-    if (!ppCache[ckey] || !ppCache[ckey].website) continue;
-    if (pg) pg.textContent = (bi + 1) + '/' + pts.length + ' controleren...';
-    await runCheck(key, pi, bi);
-    await new Promise(function(r) { setTimeout(r, 800); });
+  var pts=getPart(projectData[key][pi]);
+  var pg=document.getElementById('ap-'+key+'-'+pi);
+  for(var bi=0;bi<pts.length;bi++) {
+    var ckey=ck(key,pi,bi);
+    if(!ppCache[ckey]||!ppCache[ckey].website) continue;
+    if(pg) pg.textContent=(bi+1)+'/'+pts.length+' controleren...';
+    await runCheck(key,pi,bi);
+    await new Promise(function(r){setTimeout(r,800);});
   }
-  if (pg) pg.textContent = 'Compliance checks klaar';
+  if(pg) pg.textContent='Compliance checks klaar';
   updateDb();
 }
 
 function updateDb() {
-  var c = 0, nc = 0;
+  var c=0,nc=0;
   Object.values(ppCache).forEach(function(pp) {
-    if (pp.verwijzing !== undefined) { (pp.verwijzing && pp.eu_vlag && pp.efro) ? c++ : nc++; }
+    if(pp.verwijzing!==undefined) { (pp.verwijzing&&pp.eu_vlag&&pp.efro)?c++:nc++; }
   });
-  document.getElementById('d-compliant').textContent = c;
-  document.getElementById('d-non-compliant').textContent = nc;
+  document.getElementById('d-compliant').textContent=c;
+  document.getElementById('d-non-compliant').textContent=nc;
 }
