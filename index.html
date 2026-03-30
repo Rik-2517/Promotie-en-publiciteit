@@ -259,6 +259,7 @@ a.ul:hover{text-decoration:underline;}
         var ckey = 'rijnmond_' + pi + '_' + bi;
         cache[ckey] = window.RIJNMOND_RESULTS[k];
       });
+      updateDash();
     }
 
   function parts(p) { return (p['Begunstigden'] || '').split('|').map(function(s) { return s.trim(); }).filter(Boolean); }
@@ -313,7 +314,7 @@ a.ul:hover{text-decoration:underline;}
       pdata[key].forEach(function(p, i) {
         var o = document.createElement('option');
         o.value = i;
-        o.textContent = (p['Projectnummer']||'') + ' ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ ' + (p['Projectnaam']||'');
+        o.textContent = (p['Projectnummer']||'') + ' ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ ' + (p['Projectnaam']||'');
         sel.appendChild(o);
       });
       sel.addEventListener('change', function() { showTable(key); });
