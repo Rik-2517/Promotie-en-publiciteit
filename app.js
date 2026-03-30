@@ -35,13 +35,13 @@ function checkPwd() {
 
 function initApp() {
   // Gebruik ingebakken data uit data.js
-  if (!window.PROJECTDATA) {
-    document.getElementById('header-status').innerHTML = '<span class="status-dot orange"></span>Data niet beschikbaar';
+  if (!window.KVW3DATA || !window.IJMONDDATA || !window.RIJNMONDDATA) {
+    document.getElementById('header-status').innerHTML = '<span class="status-dot orange"></span>Data niet beschikbaar - herlaad de pagina';
     return;
   }
-  projectData.kvw3 = window.PROJECTDATA.kvw3;
-  projectData.ijmond = window.PROJECTDATA.ijmond;
-  projectData.rijnmond = window.PROJECTDATA.rijnmond;
+  projectData.kvw3 = window.KVW3DATA;
+  projectData.ijmond = window.IJMONDDATA;
+  projectData.rijnmond = window.RIJNMONDDATA;
 
   var tot = projectData.kvw3.length + projectData.ijmond.length + projectData.rijnmond.length;
   document.getElementById('d-total').textContent = tot;
@@ -66,7 +66,7 @@ function initApp() {
     projectData[key].forEach(function(p, i) {
       var o = document.createElement('option');
       o.value = i;
-      o.textContent = (p['Projectnummer'] || '') + ' â ' + (p['Projectnaam'] || '');
+      o.textContent = (p['Projectnummer'] || '') + ' Ã¢ÂÂ ' + (p['Projectnaam'] || '');
       sel.appendChild(o);
     });
     sel.addEventListener('change', function() { showProjectTable(key); });
