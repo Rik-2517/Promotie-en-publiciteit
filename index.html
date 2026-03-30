@@ -215,7 +215,7 @@ a.ul:hover{text-decoration:underline;}
 <script src="kvw3-data.js"></script>
 <script src="ijmond-data.js"></script>
 <script src="rijnmond-data.js"></script>
-<script src="rijnmond-results.js"></script>
+<script src="rijnmond-results.js?v=1774876218021"></script>
 <script>
 (function() {
   // LOGIN
@@ -306,7 +306,7 @@ a.ul:hover{text-decoration:underline;}
       pdata[key].forEach(function(p, i) {
         var o = document.createElement('option');
         o.value = i;
-        o.textContent = (p['Projectnummer']||'') + ' â ' + (p['Projectnaam']||'');
+        o.textContent = (p['Projectnummer']||'') + ' Ã¢ÂÂ ' + (p['Projectnaam']||'');
         sel.appendChild(o);
       });
       sel.addEventListener('change', function() { showTable(key); });
