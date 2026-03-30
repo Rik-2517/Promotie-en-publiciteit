@@ -66,15 +66,46 @@ function initApp() {
     projectData[key].forEach(function(p, i) {
       var o = document.createElement('option');
       o.value = i;
-      o.textContent = (p['Projectnummer'] || '') + ' Ã¢ÂÂ ' + (p['Projectnaam'] || '');
+      o.textContent = (p['Projectnummer'] || '') + ' ÃÂ¢ÃÂÃÂ ' + (p['Projectnaam'] || '');
       sel.appendChild(o);
     });
     sel.addEventListener('change', function() { showProjectTable(key); });
     document.getElementById(key + '-loading').style.display = 'none';
     document.getElementById(key + '-main').style.display = 'block';
+    // Toon initiele summary tabel
+    var summArea = document.getElementById(key + '-project-area');
+    if (summArea) summArea.innerHTML = buildSummaryTable(key);
   });
 }
 
+
+function buildSummaryTable(key) {
+  var data = projectData[key];
+  var totalProjects = data.length;
+  var totalPartners = data.reduce(function(s, p) { return s + getPart(p).length; }, 0);
+  var checked = 0, compliant = 0, nonCompliant = 0;
+  data.forEach(function(p, pi) {
+    getPart(p).forEach(function(pt, bi) {
+      var c = ppCache[ck(key, pi, bi)] || {};
+      if (c.verwijzing !== undefined) {
+        checked++;
+        (c.verwijzing && c.eu_vlag && c.efro) ? compliant++ : nonCompliant++;
+      }
+    });
+  });
+  var pct = checked > 0 ? Math.round(compliant / checked * 100) : 0;
+  return '<div class="summary-table">'
+    + '<table><thead><tr>'
+    + '<th>Totaal projecten</th><th>Totaal partners</th><th>Gecontroleerd</th><th>Compliant</th><th>Niet compliant</th><th>Compliance %</th>'
+    + '</tr></thead><tbody><tr>'
+    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--eu-blue)">' + totalProjects + '</td>'
+    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--eu-blue)">' + totalPartners + '</td>'
+    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:#555">' + checked + '</td>'
+    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--green)">' + compliant + '</td>'
+    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--red)">' + nonCompliant + '</td>'
+    + '<td style="text-align:center;font-size:20px;font-weight:bold;color:var(--eu-blue)">' + pct + '%</td>'
+    + '</tr></tbody></table></div>';
+}
 function ck(k, pi, bi) { return k + '_' + pi + '_' + bi; }
 
 function dot(v) {
@@ -104,7 +135,7 @@ function showProjectTable(key) {
     return '<tr><td><strong>' + pt + '</strong><br><span style="font-size:11px;color:#888">' + (adrs[bi] || '') + '</span></td><td>' + wsd + fnd + '</td><td style="text-align:center">' + dot(c.verwijzing) + '</td><td style="text-align:center">' + dot(c.eu_vlag) + '</td><td style="text-align:center">' + dot(c.efro) + ad + '</td><td>' + ld + '</td><td>' + td + '</td><td>' + od + '</td><td>' + chk + '</td></tr>';
   }).join('');
 
-  area.innerHTML = '<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:6px">' + (p['Projectnaam'] || '') + '</h3>'
+  area.innerHTML = buildSummaryTable(key) + '<h3 style="color:var(--eu-blue);font-size:16px;margin-bottom:6px">' + (p['Projectnaam'] || '') + '</h3>'
     + '<p style="font-size:13px;color:#666;margin-bottom:16px">Nr: ' + (p['Projectnummer'] || '') + ' &nbsp;|&nbsp; Penvoerder: ' + (p['Penvoerder naam'] || '') + ' &nbsp;|&nbsp; ' + (p['Penvoerder stad'] || '') + '</p>'
     + '<div class="agent-bar">'
     + '<button class="agent-btn blue" data-key="' + key + '" data-pi="' + idx + '" data-action="findall">&#128269; Zoek alle websites (Agent 2)</button>'
@@ -217,3 +248,5 @@ function updateDb() {
   document.getElementById('d-compliant').textContent = c;
   document.getElementById('d-non-compliant').textContent = nc;
 }
+// Voeg summary-table CSS toe
+(function(){ var s=document.createElement('style'); s.textContent='.summary-table { margin-bottom: 24px; border-radius: 10px; overflow: hidden; border: 2px solid var(--eu-blue); }.summary-table table { min-width: unset; }.summary-table th { background: var(--eu-blue); color: white; text-align: center; font-size: 12px; padding: 10px 16px; }.summary-table td { background: var(--light-blue); border-bottom: none; }'; document.head.appendChild(s); })();
