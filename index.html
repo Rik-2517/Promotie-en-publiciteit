@@ -215,6 +215,7 @@ a.ul:hover{text-decoration:underline;}
 <script src="kvw3-data.js"></script>
 <script src="ijmond-data.js"></script>
 <script src="rijnmond-data.js"></script>
+<script src="rijnmond-results.js"></script>
 <script>
 (function() {
   // LOGIN
@@ -242,6 +243,16 @@ a.ul:hover{text-decoration:underline;}
 
   var pdata = { kvw3: [], ijmond: [], rijnmond: [] };
   var cache = {};
+
+    // Laad Rijnmond resultaten in cache
+    if (window.RIJNMOND_RESULTS) {
+      Object.keys(window.RIJNMOND_RESULTS).forEach(function(k) {
+        var parts = k.replace('pi','').split('_bi');
+        var pi = parseInt(parts[0]), bi = parseInt(parts[1]);
+        var ckey = 'rijnmond_' + pi + '_' + bi;
+        cache[ckey] = window.RIJNMOND_RESULTS[k];
+      });
+    }
 
   function parts(p) { return (p['Begunstigden'] || '').split('|').map(function(s) { return s.trim(); }).filter(Boolean); }
   function ck(k, pi, bi) { return k + '_' + pi + '_' + bi; }
@@ -295,7 +306,7 @@ a.ul:hover{text-decoration:underline;}
       pdata[key].forEach(function(p, i) {
         var o = document.createElement('option');
         o.value = i;
-        o.textContent = (p['Projectnummer']||'') + ' — ' + (p['Projectnaam']||'');
+        o.textContent = (p['Projectnummer']||'') + ' â ' + (p['Projectnaam']||'');
         sel.appendChild(o);
       });
       sel.addEventListener('change', function() { showTable(key); });
