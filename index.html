@@ -27,13 +27,13 @@
     <div class="header-status" id="header-status"><span class="status-dot orange"></span>Data laden...</div>
   </header>
   <div class="tabs">
-    <div class="tab active" id="tab-btn-dashboard">Dashboard</div>
+    <div class="tab" id="tab-btn-dashboard">Dashboard</div>
     <div class="tab" id="tab-btn-kvw3">Kansen voor West III</div>
     <div class="tab" id="tab-btn-ijmond">JTF IJmond</div>
-    <div class="tab" id="tab-btn-rijnmond">JTF Rijnmond</div>
+    <div class="tab active" id="tab-btn-rijnmond">JTF Rijnmond</div>
   </div>
   <div class="content">
-    <div id="tab-dashboard" class="tab-content active">
+    <div id="tab-dashboard" class="tab-content">
       <div class="dashboard-cards">
         <div class="card"><div class="number" id="d-total">&mdash;</div><div class="label">Totaal projecten</div></div>
         <div class="card"><div class="number" id="d-kvw3-n">&mdash;</div><div class="label">Kansen voor West III</div></div>
@@ -50,7 +50,7 @@
     </div>
     <div id="tab-kvw3" class="tab-content"><div id="kvw3-loading" class="loading-bar"><span class="spinner"></span> Data laden...</div><div id="kvw3-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="kvw3-select"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="kvw3-project-area"></div></div></div>
     <div id="tab-ijmond" class="tab-content"><div id="ijmond-loading" class="loading-bar"><span class="spinner"></span> Data laden...</div><div id="ijmond-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="ijmond-select"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="ijmond-project-area"></div></div></div>
-    <div id="tab-rijnmond" class="tab-content"><div id="rijnmond-loading" class="loading-bar"><span class="spinner"></span> Data laden...</div><div id="rijnmond-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="rijnmond-select"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="rijnmond-project-area"></div></div></div>
+    <div id="tab-rijnmond" class="tab-content active"><div id="rijnmond-loading" class="loading-bar"><span class="spinner"></span> Data laden...</div><div id="rijnmond-main" style="display:none"><div class="dropdown-wrap"><label>Selecteer een project:</label><select id="rijnmond-select"><option value="">&mdash; Kies een project &mdash;</option></select></div><div id="rijnmond-project-area"></div></div></div>
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
