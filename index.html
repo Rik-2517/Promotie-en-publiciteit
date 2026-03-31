@@ -437,7 +437,7 @@ function startApp(){
     pdata[key].forEach(function(p,i){
       var o=document.createElement('option');
       o.value=i;
-      o.textContent=(p['Projectnummer']||'')+' - '+(p['Projectnaam']||'');
+      o.textContent=(p['Projectnummer']||'')+'  '+(p['Projectnaam']||'');
       sel.appendChild(o);
     });
     sel.addEventListener('change',function(){showTable(key);});
